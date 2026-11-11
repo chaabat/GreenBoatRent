@@ -1,1 +1,83 @@
-<p>header works!</p>
+<header
+  class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+  [class]="scrolled() || menuOpen() ? 'bg-navy/95 backdrop-blur shadow-lg' : 'bg-transparent'">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+
+    <!-- Logo -->
+    <a routerLink="/" class="flex flex-col items-start text-white">
+      <svg width="64" height="16" viewBox="0 0 64 16" fill="none" aria-hidden="true">
+        <path d="M2 10c8-8 20-8 30 0s22 8 30 0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M10 14c6-4 14-4 22 0s16 4 22 0" stroke="#3FB8C9" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="mt-1 text-lg font-semibold tracking-wide">GREEN BOAT RENT</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="hidden items-center gap-8 lg:flex">
+      @for (l of links; track l.path) {
+        <li>
+          <a [routerLink]="l.path"
+             routerLinkActive="!text-gold"
+             [routerLinkActiveOptions]="{ exact: l.path === '/' }"
+             class="py-2 text-[15px] font-medium text-white/90 transition hover:text-gold">
+            {{ l.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <!-- Right side -->
+    <div class="hidden items-center gap-5 lg:flex">
+      <div class="flex items-center gap-2 text-sm text-white/70">
+        @for (l of langs; track l; let last = $last) {
+          <button type="button" (click)="setLang(l)"
+                  class="uppercase transition hover:text-white"
+                  [class.font-semibold]="lang() === l"
+                  [class.text-white]="lang() === l">{{ l }}</button>
+          @if (!last) { <span class="text-white/40">|</span> }
+        }
+      </div>
+      <a routerLink="/flotta"
+         class="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-gold-dark">
+        Prenota ora
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <!-- Mobile burger -->
+    <button type="button" (click)="toggleMenu()" class="p-2 text-white lg:hidden"
+            [attr.aria-label]="menuOpen() ? 'Chiudi menu' : 'Apri menu'"
+            [attr.aria-expanded]="menuOpen()">
+      @if (menuOpen()) {
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      } @else {
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      }
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  @if (menuOpen()) {
+    <div class="border-t border-white/10 px-5 pb-6 lg:hidden">
+      <ul class="flex flex-col py-2">
+        @for (l of links; track l.path) {
+          <li>
+            <a [routerLink]="l.path" (click)="toggleMenu()"
+               class="block py-3 text-lg text-white/90 hover:text-gold">{{ l.label }}</a>
+          </li>
+        }
+      </ul>
+      <div class="mb-4 flex gap-4 text-sm text-white/70">
+        @for (l of langs; track l) {
+          <button type="button" (click)="setLang(l)" class="uppercase"
+                  [class.font-semibold]="lang() === l"
+                  [class.text-white]="lang() === l">{{ l }}</button>
+        }
+      </div>
+      <a routerLink="/flotta" (click)="toggleMenu()"
+         class="flex w-full items-center justify-center rounded-full bg-gold py-3 font-semibold text-navy">
+        Prenota ora
+      </a>
+    </div>
+  }
+</header>
