@@ -1,0 +1,18 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    profiles: ["dev"]
+
+  prod:
+    build: .
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    profiles: ["prod"]
