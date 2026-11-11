@@ -1,1 +1,96 @@
-<p>boat-detail works!</p>
+@let b = boat();
+
+@if (!b) {
+  <section class="mx-auto max-w-xl px-5 pt-40 pb-32 text-center">
+    <h1 class="font-serif text-4xl text-navy">Barca non trovata</h1>
+    <a routerLink="/flotta" class="mt-6 inline-block rounded-full bg-navy px-6 py-3 font-semibold text-white">Vedi la flotta</a>
+  </section>
+} @else {
+
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden bg-navy">
+    <img [src]="b.spot.image" alt="" class="absolute inset-0 h-full w-full object-cover opacity-70">
+    <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/30"></div>
+
+    <div class="relative mx-auto grid max-w-7xl items-end gap-6 px-5 pt-32 pb-16 lg:grid-cols-[1fr_1.1fr] lg:px-8 lg:pb-24">
+      <div>
+        <a routerLink="/flotta" class="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+          La flotta
+        </a>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="rounded-full bg-gold px-3 py-1 text-xs font-semibold text-navy">{{ b.licenseLabel }}</span>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/></svg>
+            {{ b.spot.name }}
+          </span>
+        </div>
+        <h1 class="mt-4 font-serif text-5xl leading-none text-white sm:text-6xl">{{ b.name }}</h1>
+        <p class="mt-4 max-w-md text-white/80">
+          {{ b.category === 'gommone' ? 'Gommone' : 'Yacht' }} di {{ b.length }} per fino a {{ b.pax }} persone,
+          {{ b.licenseLabel.toLowerCase() }}. Parti da Cannigione verso l'Arcipelago della Maddalena.
+        </p>
+      </div>
+
+      <img [src]="b.cutout" [alt]="b.name"
+           class="mx-auto w-full max-w-xl animate-bob drop-shadow-[0_30px_30px_rgba(0,0,0,0.5)] lg:-mb-6">
+    </div>
+  </section>
+
+  <!-- ===== CONTENT ===== -->
+  <section class="mx-auto grid max-w-7xl gap-10 px-5 py-14 lg:grid-cols-[1fr_440px] lg:px-8">
+
+    <!-- Left -->
+    <div class="space-y-10">
+      <div>
+        <h2 class="font-serif text-3xl text-navy">Caratteristiche</h2>
+        <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          @for (s of specs(); track s.label) {
+            <div class="rounded-2xl bg-white p-4">
+              <p class="text-xs font-semibold uppercase tracking-wider text-navy/50">{{ s.label }}</p>
+              <p class="mt-1 font-semibold text-navy">{{ s.value }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-3xl text-navy">Incluso</h2>
+        <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+          @for (i of included(); track i) {
+            <li class="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-sm text-navy">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sand">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F6E8C" stroke-width="3"><path d="M5 12l4 4 10-10"/></svg>
+              </span>
+              {{ i }}
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="rounded-3xl bg-navy p-6 text-white sm:p-8">
+        <h2 class="font-serif text-2xl">Come funziona</h2>
+        <ol class="mt-5 space-y-4 text-sm text-white/80">
+          <li class="flex gap-4"><span class="font-serif text-2xl text-gold">01</span><span>Scegli data e durata e invia la richiesta.</span></li>
+          <li class="flex gap-4"><span class="font-serif text-2xl text-gold">02</span><span>Il proprietario controlla disponibilità e meteo.</span></li>
+          <li class="flex gap-4"><span class="font-serif text-2xl text-gold">03</span><span>Ricevi la conferma via email con orario e punto d'incontro.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Right: booking (sticky on desktop) -->
+    <aside id="prenota" class="lg:sticky lg:top-24 lg:self-start">
+      <app-booking-form [boat]="b" [initialDate]="initialDate()" />
+    </aside>
+  </section>
+
+  <!-- ===== OTHER BOATS ===== -->
+  <section class="mx-auto max-w-7xl px-5 pb-28 lg:px-8">
+    <h2 class="text-center font-serif text-4xl text-navy">Altre imbarcazioni</h2>
+    <div class="mt-16 grid gap-x-8 gap-y-20 sm:mt-24 sm:grid-cols-2 sm:gap-y-28 lg:grid-cols-3">
+      @for (o of others(); track o.id) {
+        <app-boat-card [boat]="o" />
+      }
+    </div>
+  </section>
+}

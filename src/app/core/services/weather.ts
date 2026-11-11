@@ -51,6 +51,40 @@ export class WeatherService {
     if (w >= 0.6 || wind >= 13 || gusts >= 20) return 'caution';
     return 'good';
   }
+    /** Forecast for one day (weather up to 15 days, waves up to 7 days ahead) */
+  dayForecast(date: string): Observable<DayForecast | null> {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const diff = Math.round((new Date(date + 'T00:00').getTime() - today.getTime()) / 86_400_000);
+    if (diff < 0 || diff > 15) return of(null);
+
+    const weather$ = this.http.get<any>('https://api.open-meteo.com/v1/forecast', {
+      params: {
+        ...LAND,
+        daily: 'weather_code,temperature_2m_max,wind_speed_10m_max,wind_gusts_10m_max',
+        wind_speed_unit: 'kn', timezone: 'Europe/Rome', start_date: date, end_date: date
+      }
+    });
+    const marine$ = diff > 7 ? of(null) : this.http.get<any>('https://marine-api.open-meteo.com/v1/marine', {
+      params: { ...SEA, daily: 'wave_height_max', timezone: 'Europe/Rome', start_date: date, end_date: date }
+    }).pipe(catchError(() => of(null)));
+
+    return forkJoin([weather$, marine$]).pipe(
+      map(([w, m]) => {
+        const windMax = w.daily.wind_speed_10m_max[0];
+        const gustMax = w.daily.wind_gusts_10m_max[0];
+        const waveMax: number | null = m?.daily?.wave_height_max?.[0] ?? null;
+        return {
+          date,
+          dayLabel: DAYS[new Date(date + 'T00:00').getDay()],
+          code: w.daily.weather_code[0],
+          tMax: Math.round(w.daily.temperature_2m_max[0]),
+          windMax: Math.round(windMax),
+          waveMax,
+          status: WeatherService.status(windMax, gustMax, waveMax)
+        };
+      })
+    );
+  }
 
   private fetch(): Observable<SeaConditions> {
     const weather$ = this.http.get<any>('https://api.open-meteo.com/v1/forecast', {

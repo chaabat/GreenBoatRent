@@ -12,7 +12,13 @@
 
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
+  --animate-bob: bob 4s ease-in-out infinite;
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50%      { transform: translateY(-12px) rotate(1deg); }
+  }
 }
+
 
 html { scroll-behavior: smooth; }
 body { @apply bg-sand text-navy font-sans antialiased; }
