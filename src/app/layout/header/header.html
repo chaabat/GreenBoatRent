@@ -28,15 +28,7 @@
 
     <!-- Right side -->
     <div class="hidden items-center gap-5 lg:flex">
-      <div class="flex items-center gap-2 text-sm text-white/70">
-        @for (l of langs; track l; let last = $last) {
-          <button type="button" (click)="setLang(l)"
-                  class="uppercase transition hover:text-white"
-                  [class.font-semibold]="lang() === l"
-                  [class.text-white]="lang() === l">{{ l }}</button>
-          @if (!last) { <span class="text-white/40">|</span> }
-        }
-      </div>
+      <app-lang-switcher />
       <a routerLink="/flotta"
          class="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-gold-dark">
         Prenota ora
@@ -67,12 +59,8 @@
           </li>
         }
       </ul>
-      <div class="mb-4 flex gap-4 text-sm text-white/70">
-        @for (l of langs; track l) {
-          <button type="button" (click)="setLang(l)" class="uppercase"
-                  [class.font-semibold]="lang() === l"
-                  [class.text-white]="lang() === l">{{ l }}</button>
-        }
+      <div class="mb-4">
+        <app-lang-switcher />
       </div>
       <a routerLink="/flotta" (click)="toggleMenu()"
          class="flex w-full items-center justify-center rounded-full bg-gold py-3 font-semibold text-navy">

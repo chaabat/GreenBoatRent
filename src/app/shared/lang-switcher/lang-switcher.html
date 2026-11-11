@@ -1,0 +1,34 @@
+<div class="relative">
+  <!-- Trigger -->
+  <button type="button" (click)="toggle()"
+          [attr.aria-expanded]="open()" aria-haspopup="listbox"
+          class="flex items-center gap-2 rounded-full border border-white/30 px-3 py-2 text-sm font-medium text-white transition hover:border-white/70">
+    <img [src]="current().flag" alt="" class="h-3.5 w-5 rounded-[2px] object-cover shadow-sm">
+    <span class="uppercase">{{ current().code }}</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         class="transition-transform duration-200" [class.rotate-180]="open()" aria-hidden="true">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <!-- Menu -->
+  @if (open()) {
+    <ul role="listbox"
+        class="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-2xl bg-white py-1.5 shadow-xl shadow-navy/20 ring-1 ring-navy/5">
+      @for (l of languages; track l.code) {
+        <li>
+          <button type="button" role="option" (click)="select(l.code)"
+                  [attr.aria-selected]="l.code === lang()"
+                  class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-navy transition hover:bg-sand"
+                  [class.font-semibold]="l.code === lang()">
+            <img [src]="l.flag" alt="" class="h-3.5 w-5 rounded-[2px] object-cover shadow-sm">
+            <span class="flex-1">{{ l.label }}</span>
+            @if (l.code === lang()) {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C99540" stroke-width="2.5" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>
+            }
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

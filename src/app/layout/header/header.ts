@@ -1,16 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LangSwitcher } from '../../shared/lang-switcher/lang-switcher';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, LangSwitcher],
   templateUrl: './header.html',
   host: { '(window:scroll)': 'onScroll()' }
 })
 export class Header {
   scrolled = signal(false);
   menuOpen = signal(false);
-  lang = signal<'it' | 'en' | 'fr'>('it');
 
   links = [
     { label: 'Home', path: '/' },
@@ -19,9 +19,7 @@ export class Header {
     { label: 'Destinazioni', path: '/destinazioni' },
     { label: 'Contatti', path: '/contatti' }
   ];
-  langs = ['it', 'en', 'fr'] as const;
 
   onScroll() { this.scrolled.set(window.scrollY > 40); }
   toggleMenu() { this.menuOpen.update(v => !v); }
-  setLang(l: 'it' | 'en' | 'fr') { this.lang.set(l); }
 }
