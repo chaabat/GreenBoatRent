@@ -1,3 +1,43 @@
-<section class="flex min-h-screen items-center justify-center bg-navy">
-  <h1 class="font-serif text-6xl text-white">Vivi il mare. <span class="italic text-gold">Scopri la Sardegna.</span></h1>
+<!-- HERO -->
+<section class="relative flex min-h-[92vh] items-center overflow-hidden bg-navy">
+  <img src="images/hero.jpg" alt="Gommone nell'Arcipelago della Maddalena"
+       class="absolute inset-0 h-full w-full object-cover">
+  <div class="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/45 to-transparent"></div>
+
+  <div class="relative mx-auto w-full max-w-7xl px-5 pt-28 pb-40 lg:px-8">
+    <p class="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+      <span class="h-px w-8 bg-gold"></span> Sardegna · Costa Smeralda
+    </p>
+
+    <h1 class="max-w-2xl font-serif text-5xl leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+      Vivi il mare.<br>
+      <span class="italic text-gold">Scopri la Sardegna.</span>
+    </h1>
+
+    <p class="mt-6 max-w-lg text-lg text-white/85">
+      Noleggio gommoni e yacht a Cannigione, per un'esperienza indimenticabile
+      nell'Arcipelago della Maddalena.
+    </p>
+
+    <div class="mt-9 flex flex-wrap gap-4">
+      <a routerLink="/flotta"
+         class="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 font-semibold text-navy transition hover:bg-gold-dark">
+        Prenota la tua barca
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a routerLink="/esperienze"
+         class="inline-flex items-center gap-2 rounded-full border border-white/70 px-7 py-3.5 font-semibold text-white transition hover:bg-white hover:text-navy">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        Guarda il video
+      </a>
+    </div>
+  </div>
 </section>
+
+<!-- SEARCH BAR (overlaps hero) -->
+<div class="relative z-10 mx-auto -mt-20 max-w-5xl px-5">
+  <app-search-bar />
+</div>
+
+<!-- spacer for now -->
+<div class="h-64"></div>
