@@ -55,3 +55,88 @@
     }
   </div>
 </section>
+
+
+<!-- EXPERIENCES BANNER -->
+<section class="relative overflow-hidden bg-navy">
+  <img src="images/destinations/mortorio.jpg" alt="" class="absolute inset-0 h-full w-full object-cover">
+  <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-navy/10"></div>
+
+  <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-28">
+    <div>
+      <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+        <span class="h-px w-8 bg-gold"></span> Le nostre esperienze
+      </p>
+      <h2 class="mt-4 font-serif text-4xl leading-tight text-white sm:text-5xl">
+        La Sardegna più bella,<br><span class="italic text-gold">dal mare.</span>
+      </h2>
+      <p class="mt-5 max-w-md text-white/80">
+        Escursioni, tour e giornate in barca alla scoperta delle baie nascoste
+        dell'Arcipelago della Maddalena.
+      </p>
+      <a routerLink="/esperienze"
+         class="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 font-semibold text-navy transition hover:bg-gold-dark">
+        Scopri le esperienze
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="flex justify-start lg:justify-end">
+      <button type="button"
+              class="group flex items-center gap-4 text-white"
+              aria-label="Guarda il video">
+        <span class="flex h-20 w-20 items-center justify-center rounded-full border-2 border-white/70 transition group-hover:scale-110 group-hover:border-gold group-hover:bg-gold">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="ml-1 group-hover:text-navy" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="text-lg font-semibold">Guarda il video</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+  <div class="text-center">
+    <p class="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold-dark">
+      <span class="h-px w-8 bg-gold"></span> Le nostre destinazioni <span class="h-px w-8 bg-gold"></span>
+    </p>
+    <h2 class="mt-4 font-serif text-4xl text-navy sm:text-5xl">Paradisi da esplorare</h2>
+  </div>
+
+  <div class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+    @for (d of destinations; track d.id; let first = $first) {
+      <a routerLink="/destinazioni"
+         class="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-ocean"
+         [class.col-span-2]="first" [class.md:col-span-1]="first">
+        <img [src]="d.image" [alt]="d.name" loading="lazy"
+             class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+        <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-4">
+          <h3 class="flex items-center gap-1.5 font-serif text-xl text-white">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            {{ d.name }}
+          </h3>
+          <p class="mt-1 max-h-0 overflow-hidden text-xs text-white/80 opacity-0 transition-all duration-500 group-hover:max-h-10 group-hover:opacity-100">
+            {{ d.description }}
+          </p>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
+  <div class="grid grid-cols-2 gap-6 rounded-3xl bg-white p-6 shadow-sm md:grid-cols-4 md:p-8">
+    @for (p of perks; track p.title) {
+      <div class="flex items-center gap-3">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sand text-navy">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path [attr.d]="p.icon"/>
+          </svg>
+        </span>
+        <span class="text-sm font-semibold text-navy">{{ p.title }}</span>
+      </div>
+    }
+  </div>
+</section>
