@@ -1,1 +1,37 @@
-<p>boat-card works!</p>
+<a class="card" [class.popped]="popped" [routerLink]="['/flotta', boat().id]"
+   [attr.aria-label]="'Scopri ' + boat().name">
+
+  <!-- Background scene -->
+  <div class="wrapper">
+    <img class="cover" [src]="boat().cover" [alt]="''" (error)="hide($event)">
+  </div>
+
+  <!-- Boat that pops out -->
+  <img class="boat" [src]="boat().cutout" [alt]="boat().name" (error)="hide($event)">
+
+  <!-- Info (replaces the logo) -->
+  <div class="info">
+    <span class="badge">{{ boat().licenseLabel }}</span>
+    <h3 class="name">{{ boat().name }}</h3>
+
+    <ul class="specs">
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/></svg>
+        {{ boat().pax }} pax
+      </li>
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>
+        {{ boat().length }}
+      </li>
+      <li>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>
+        {{ boat().engine }}
+      </li>
+    </ul>
+
+    <span class="cta">
+      Prenota ora
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </div>
+</a>

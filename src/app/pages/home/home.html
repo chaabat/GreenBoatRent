@@ -39,5 +39,19 @@
   <app-search-bar />
 </div>
 
-<!-- spacer for now -->
-<div class="h-64"></div>
+<!-- FLEET -->
+<section class="mx-auto max-w-7xl px-5 pt-24 pb-28 lg:px-8">
+  <div class="text-center">
+    <p class="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold-dark">
+      <span class="h-px w-8 bg-gold"></span> La nostra flotta <span class="h-px w-8 bg-gold"></span>
+    </p>
+    <h2 class="mt-4 font-serif text-4xl text-navy sm:text-5xl">Barche per ogni esigenza</h2>
+  </div>
+
+  <!-- big vertical gap so the boats have room to pop out -->
+  <div class="mt-24 grid gap-x-8 gap-y-28 sm:grid-cols-2 lg:grid-cols-3">
+    @for (b of boats; track b.id) {
+      <app-boat-card [boat]="b" />
+    }
+  </div>
+</section>

@@ -1,0 +1,150 @@
+:host { display: block; }
+
+/* ---------- Card ---------- */
+.card {
+  --boat-y: -58%;      /* how high the boat jumps */
+  --boat-z: 450px;     /* how much it comes toward you */
+  --navy: 11, 42, 60;
+
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  aspect-ratio: 300 / 455;
+  perspective: 2500px;
+  border-radius: 28px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ---------- Background scene ---------- */
+.wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(160deg, #1F6E8C, #0B2A3C);
+  box-shadow: rgba(0,0,0,.25) 0 14px 28px, rgba(0,0,0,.22) 0 10px 10px;
+  transition: transform .5s, box-shadow .5s;
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .5s;
+}
+.wrapper::before,
+.wrapper::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  transition: all .5s;
+  pointer-events: none;
+}
+.wrapper::before {          /* top shadow, appears on hover */
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  background: linear-gradient(to top, transparent 46%, rgba(var(--navy), .5) 68%, rgb(var(--navy)) 97%);
+}
+.wrapper::after {           /* bottom shadow behind the text */
+  bottom: 0;
+  height: 55%;
+  background: linear-gradient(to bottom, transparent 10%, rgba(var(--navy), .6) 50%, rgb(var(--navy)) 95%);
+}
+
+/* ---------- Boat cut-out ---------- */
+.boat {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  z-index: 1;
+  width: 125%;
+  max-width: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, 0, 0);
+  filter: drop-shadow(0 20px 18px rgba(0,0,0,.45));
+  transition: all .5s;
+}
+
+/* ---------- Info ---------- */
+.info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 24px;
+  transition: transform .5s;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #E3B062;
+  color: #0B2A3C;
+  font-size: 12px;
+  font-weight: 600;
+}
+.name {
+  margin: 10px 0 8px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 28px;
+  line-height: 1.1;
+}
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: rgba(255,255,255,.85);
+}
+.specs li { display: flex; align-items: center; gap: 5px; }
+.cta {
+  position: absolute;
+  left: 24px;
+  bottom: -20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #E3B062;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .5s;
+}
+
+/* ---------- Hover / focus / touch = popped ---------- */
+.card:is(:hover, :focus-visible, .popped) .wrapper {
+  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+  box-shadow: 2px 35px 32px -8px rgba(var(--navy), .75);
+}
+.card:is(:hover, :focus-visible, .popped) .wrapper::before { opacity: 1; }
+.card:is(:hover, :focus-visible, .popped) .wrapper::after  { height: 70%; }
+.card:is(:hover, :focus-visible, .popped) .cover { opacity: .35; }
+.card:is(:hover, :focus-visible, .popped) .boat {
+  opacity: 1;
+  transform: translate3d(-50%, var(--boat-y), var(--boat-z));
+}
+.card:is(:hover, :focus-visible, .popped) .info {
+  transform: translate3d(0, -40px, 100px);
+}
+.card:is(:hover, :focus-visible, .popped) .cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card:focus-visible { box-shadow: 0 0 0 3px #E3B062; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper, .boat, .info, .cta, .cover { transition: none; }
+}

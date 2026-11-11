@@ -13,5 +13,6 @@ export interface Boat {
   tank?: string;
   cabins?: string;
   shower: boolean;
-  image: string;
+  cover: string;   // background photo
+  cutout: string;  // boat PNG with transparent background
 }
