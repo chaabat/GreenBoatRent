@@ -140,3 +140,95 @@
     }
   </div>
 </section>
+
+
+
+<!-- CONTACT CTA -->
+<section class="relative overflow-hidden bg-navy">
+  <img src="images/spots/arcipelago.jpg" alt="" class="absolute inset-0 h-full w-full object-cover opacity-40">
+  <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/40"></div>
+
+  <div class="relative mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
+    <!-- Left -->
+    <div class="text-white">
+      <h2 class="font-serif text-4xl sm:text-5xl">Pronto a salpare?</h2>
+      <p class="mt-4 max-w-md text-white/80">
+        Contattaci per informazioni o assistenza personalizzata.
+        Per prenotare, scegli la tua barca e invia una richiesta.
+      </p>
+
+      <ul class="mt-8 space-y-4">
+        <li class="flex items-center gap-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Cannigione, Porto Cervo – Costa Smeralda
+        </li>
+        <li class="flex items-center gap-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          <a href="tel:+393791869281" class="text-lg font-semibold hover:text-gold">+39 379 186 9281</a>
+        </li>
+      </ul>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a routerLink="/flotta"
+           class="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-navy transition hover:bg-gold-dark">
+          Prenota ora
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="https://wa.me/393791869281" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-3 text-sm text-white/90 transition hover:border-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2m5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+      @if (contactSent()) {
+        <div class="flex h-full flex-col items-center justify-center py-10 text-center">
+          <span class="flex h-16 w-16 items-center justify-center rounded-full bg-sand">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0B2A3C" stroke-width="2.5" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>
+          </span>
+          <h3 class="mt-4 font-serif text-2xl text-navy">Messaggio inviato</h3>
+          <p class="mt-2 text-sm text-navy/70">Ti risponderemo il prima possibile.</p>
+          <button type="button" (click)="contactSent.set(false)" class="mt-6 text-sm font-semibold text-ocean hover:underline">
+            Invia un altro messaggio
+          </button>
+        </div>
+      } @else {
+        <form (submit)="sendContact($event)" class="space-y-4">
+          <h3 class="font-serif text-2xl text-navy">Scrivici</h3>
+
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Nome e cognome</span>
+            <input name="name" type="text" required
+                   class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none transition focus:border-ocean focus:bg-white">
+          </label>
+
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Email</span>
+            <input name="email" type="email" required
+                   class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none transition focus:border-ocean focus:bg-white">
+          </label>
+
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Messaggio</span>
+            <textarea name="message" rows="4" required
+                      class="w-full resize-none rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none transition focus:border-ocean focus:bg-white"></textarea>
+          </label>
+
+          <label class="flex items-start gap-3 text-xs text-navy/70">
+            <input type="checkbox" required class="mt-0.5 h-4 w-4 shrink-0 accent-navy">
+            Acconsento al trattamento dei dati personali per ricevere una risposta (GDPR).
+          </label>
+
+          <button type="submit"
+                  class="flex w-full items-center justify-center gap-2 rounded-full bg-navy py-3.5 font-semibold text-white transition hover:bg-ocean">
+            Invia messaggio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      }
+    </div>
+  </div>
+</section>

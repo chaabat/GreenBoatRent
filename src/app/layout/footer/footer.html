@@ -1,1 +1,27 @@
-<p>footer works!</p>
+<footer class="border-t border-white/10 bg-navy text-white/80">
+  <div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[1.2fr_2fr_1.2fr] md:items-center lg:px-8">
+    <a routerLink="/" class="block">
+      <img src="images/logo-white.png" alt="Green Boat Rent" class="h-12 w-auto">
+    </a>
+
+    <ul class="flex flex-wrap gap-x-7 gap-y-3 text-sm md:justify-center">
+      @for (l of links; track l.path) {
+        <li><a [routerLink]="l.path" class="transition hover:text-gold">{{ l.label }}</a></li>
+      }
+    </ul>
+
+    <p class="font-serif text-lg italic text-white/70 md:text-right">
+      Vivi il mare, vivi la Sardegna.
+    </p>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-white/60 sm:flex-row sm:justify-between lg:px-8">
+      <span>© {{ year }} Green Boat Rent S.r.l. Tutti i diritti riservati.</span>
+      <span class="flex gap-4">
+        <a href="#" class="hover:text-white">Privacy Policy</a>
+        <a href="#" class="hover:text-white">Termini e Condizioni</a>
+      </span>
+    </div>
+  </div>
+</footer>
