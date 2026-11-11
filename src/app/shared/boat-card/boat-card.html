@@ -1,17 +1,30 @@
-<a class="card" [class.popped]="popped" [routerLink]="['/flotta', boat().id]"
-   [attr.aria-label]="'Scopri ' + boat().name">
+<a class="card" [class.active]="active()" [routerLink]="['/flotta', boat().id]"
+   [attr.aria-label]="'Scopri ' + boat().name"
+   (pointermove)="tilt($event)" (pointerleave)="resetTilt($event)">
 
-  <!-- Background scene -->
+  <!-- Scene: boat photo → Sardinia spot -->
   <div class="wrapper">
-    <img class="cover" [src]="boat().cover" [alt]="''" (error)="hide($event)">
+    <img class="cover" [src]="boat().cover" alt="" (error)="hide($event)">
+    <img class="spot" [src]="boat().spot.image" alt="" loading="lazy" (error)="hide($event)">
   </div>
 
-  <!-- Boat that pops out -->
-  <img class="boat" [src]="boat().cutout" [alt]="boat().name" (error)="hide($event)">
+  <!-- Boat that sails out toward you -->
+  <div class="boat-wrap" aria-hidden="true">
+    <span class="wake"></span>
+    <span class="wake w2"></span>
+    <img class="boat" [src]="boat().cutout" alt="" (error)="hide($event)">
+  </div>
 
-  <!-- Info (replaces the logo) -->
+  <!-- Info -->
   <div class="info">
-    <span class="badge">{{ boat().licenseLabel }}</span>
+    <div class="tags">
+      <span class="badge">{{ boat().licenseLabel }}</span>
+      <span class="place">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        {{ boat().spot.name }}
+      </span>
+    </div>
+
     <h3 class="name">{{ boat().name }}</h3>
 
     <ul class="specs">

@@ -1,5 +1,10 @@
 export type LicenseType = 'none' | 'required' | 'skipper' | 'crew';
 
+export interface Spot {
+  name: string;
+  image: string;
+}
+
 export interface Boat {
   id: string;
   name: string;
@@ -13,6 +18,7 @@ export interface Boat {
   tank?: string;
   cabins?: string;
   shower: boolean;
-  cover: string;   // background photo
-  cutout: string;  // boat PNG with transparent background
+  cover: string;   // boat photo
+  cutout: string;  // boat PNG, transparent
+  spot: Spot;      // Sardinia place shown on hover
 }

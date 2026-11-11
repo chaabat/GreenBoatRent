@@ -1,9 +1,12 @@
-:host { display: block; }
+:host { display: block; position: relative; z-index: 0; }
+:host(:hover), :host(.is-active) { z-index: 5; }
 
-/* ---------- Card ---------- */
+/* ================= Card ================= */
 .card {
-  --boat-y: -58%;      /* how high the boat jumps */
-  --boat-z: 450px;     /* how much it comes toward you */
+  --boat-y: -40%;     /* how high the boat rises */
+  --boat-z: 200px;    /* how far it comes toward you */
+  --rx: 0deg;         /* mouse tilt (set from TS) */
+  --ry: 0deg;
   --navy: 11, 42, 60;
 
   position: relative;
@@ -12,15 +15,15 @@
   max-width: 340px;
   margin: 0 auto;
   aspect-ratio: 300 / 455;
-  perspective: 2500px;
+  perspective: 1200px;
   border-radius: 28px;
   color: #fff;
   text-decoration: none;
-  cursor: pointer;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ---------- Background scene ---------- */
+/* ================= Scene (boat photo → Sardinia spot) ================= */
 .wrapper {
   position: absolute;
   inset: 0;
@@ -29,13 +32,21 @@
   border-radius: 28px;
   background: linear-gradient(160deg, #1F6E8C, #0B2A3C);
   box-shadow: rgba(0,0,0,.25) 0 14px 28px, rgba(0,0,0,.22) 0 10px 10px;
-  transition: transform .5s, box-shadow .5s;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s;
 }
-.cover {
+.cover,
+.spot {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity .5s;
+}
+.cover { transition: opacity .6s, transform 1.2s; }
+.spot {
+  opacity: 0;
+  transform: scale(1.18);
+  transition: opacity .7s, transform 2.4s cubic-bezier(.2,.8,.2,1);
 }
 .wrapper::before,
 .wrapper::after {
@@ -43,48 +54,89 @@
   position: absolute;
   left: 0;
   width: 100%;
-  transition: all .5s;
+  z-index: 1;
   pointer-events: none;
+  transition: all .6s;
 }
-.wrapper::before {          /* top shadow, appears on hover */
+.wrapper::before {            /* soft top shade */
   top: 0;
-  height: 100%;
+  height: 45%;
   opacity: 0;
-  background: linear-gradient(to top, transparent 46%, rgba(var(--navy), .5) 68%, rgb(var(--navy)) 97%);
+  background: linear-gradient(to bottom, rgba(var(--navy), .55), transparent);
 }
-.wrapper::after {           /* bottom shadow behind the text */
+.wrapper::after {             /* bottom shade behind text */
   bottom: 0;
   height: 55%;
-  background: linear-gradient(to bottom, transparent 10%, rgba(var(--navy), .6) 50%, rgb(var(--navy)) 95%);
+  background: linear-gradient(to bottom, transparent 5%, rgba(var(--navy), .65) 50%, rgb(var(--navy)) 95%);
 }
 
-/* ---------- Boat cut-out ---------- */
-.boat {
+/* ================= Boat that sails out ================= */
+.boat-wrap {
   position: absolute;
-  top: 28%;
+  top: 24%;
   left: 50%;
-  z-index: 1;
-  width: 125%;
-  max-width: none;
-  opacity: 0;
+  z-index: 2;
+  width: 118%;
   pointer-events: none;
-  transform: translate3d(-50%, 0, 0);
-  filter: drop-shadow(0 20px 18px rgba(0,0,0,.45));
-  transition: all .5s;
+  opacity: 0;
+  filter: blur(6px);
+  transform-origin: 50% 60%;
+  /* resting: far away in the scene */
+  transform: translate3d(-50%, 35%, -420px) scale(.45) rotateZ(-6deg);
+  transition:
+    transform 1s cubic-bezier(.2, .9, .25, 1.12),
+    opacity .45s ease,
+    filter .7s ease;
+}
+.boat {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 26px 22px rgba(0,0,0,.5));
+  animation: bob 3.2s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.wake {                         /* foam rings under the hull */
+  position: absolute;
+  left: 8%;
+  bottom: -4%;
+  width: 84%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.55), rgba(255,255,255,.15) 45%, transparent 70%);
+  opacity: 0;
+  animation: wake 2.6s ease-out infinite;
+  animation-play-state: paused;
+}
+.wake.w2 { animation-delay: 1.3s; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50%      { transform: translateY(-9px) rotate(1.2deg); }
+}
+@keyframes wake {
+  0%   { transform: scale(.55); opacity: .75; }
+  100% { transform: scale(1.35); opacity: 0; }
 }
 
-/* ---------- Info ---------- */
+/* ================= Info ================= */
 .info {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 3;
   padding: 24px;
-  transition: transform .5s;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.tags { display: grid; }
+.tags > * {
+  grid-area: 1 / 1;
+  justify-self: start;
+  transition: opacity .4s, transform .4s;
 }
 .badge {
-  display: inline-block;
   padding: 4px 12px;
   border-radius: 999px;
   background: #E3B062;
@@ -92,11 +144,25 @@
   font-size: 12px;
   font-weight: 600;
 }
+.place {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(6px);
+}
 .name {
   margin: 10px 0 8px;
   font-family: "Playfair Display", Georgia, serif;
   font-size: 28px;
   line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
 }
 .specs {
   display: flex;
@@ -106,13 +172,13 @@
   padding: 0;
   list-style: none;
   font-size: 13px;
-  color: rgba(255,255,255,.85);
+  color: rgba(255,255,255,.88);
 }
 .specs li { display: flex; align-items: center; gap: 5px; }
 .cta {
   position: absolute;
   left: 24px;
-  bottom: -20px;
+  bottom: -18px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -124,27 +190,47 @@
   transition: all .5s;
 }
 
-/* ---------- Hover / focus / touch = popped ---------- */
-.card:is(:hover, :focus-visible, .popped) .wrapper {
-  transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
-  box-shadow: 2px 35px 32px -8px rgba(var(--navy), .75);
+/* ================= Active (hover / focus / mobile in view) ================= */
+.card:is(:hover, :focus-visible, .active) .wrapper {
+  transform: perspective(900px) translateY(-4%) rotateX(22deg);
+  box-shadow: 2px 38px 34px -8px rgba(var(--navy), .7);
 }
-.card:is(:hover, :focus-visible, .popped) .wrapper::before { opacity: 1; }
-.card:is(:hover, :focus-visible, .popped) .wrapper::after  { height: 70%; }
-.card:is(:hover, :focus-visible, .popped) .cover { opacity: .35; }
-.card:is(:hover, :focus-visible, .popped) .boat {
+.card:is(:hover, :focus-visible, .active) .wrapper::before { opacity: 1; }
+.card:is(:hover, :focus-visible, .active) .cover { opacity: 0; transform: scale(1.08); }
+.card:is(:hover, :focus-visible, .active) .spot  { opacity: 1; transform: scale(1); }
+
+.card:is(:hover, :focus-visible, .active) .boat-wrap {
   opacity: 1;
-  transform: translate3d(-50%, var(--boat-y), var(--boat-z));
+  filter: blur(0);
+  transform: translate3d(-50%, var(--boat-y), var(--boat-z)) rotateX(var(--rx)) rotateY(var(--ry));
 }
-.card:is(:hover, :focus-visible, .popped) .info {
-  transform: translate3d(0, -40px, 100px);
-}
-.card:is(:hover, :focus-visible, .popped) .cta {
-  opacity: 1;
-  transform: translateY(0);
-}
+.card:is(:hover, :focus-visible, .active) .boat,
+.card:is(:hover, :focus-visible, .active) .wake { animation-play-state: running; }
+
+.card:is(:hover, :focus-visible, .active) .info { transform: translate3d(0, -38px, 60px); }
+.card:is(:hover, :focus-visible, .active) .badge { opacity: 0; transform: translateY(-6px); }
+.card:is(:hover, :focus-visible, .active) .place { opacity: 1; transform: translateY(0); }
+.card:is(:hover, :focus-visible, .active) .cta { opacity: 1; transform: translateY(0); }
 .card:focus-visible { box-shadow: 0 0 0 3px #E3B062; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wrapper, .boat, .info, .cta, .cover { transition: none; }
+  .wrapper, .cover, .spot, .boat-wrap, .info, .cta, .tags > * { transition-duration: .01s; }
+  .boat, .wake { animation: none; }
+}
+
+
+
+/* ================= Phones ================= */
+@media (max-width: 640px) {
+  .card {
+    max-width: 280px;
+    --boat-y: -30%;
+    --boat-z: 90px;
+  }
+  .boat-wrap { top: 26%; width: 100%; }
+  .info { padding: 20px; }
+  .name { font-size: 24px; }
+  .specs { font-size: 12px; gap: 4px 12px; }
+  .cta { left: 20px; }
+  .card:is(:hover, :focus-visible, .active) .info { transform: translate3d(0, -32px, 40px); }
 }
