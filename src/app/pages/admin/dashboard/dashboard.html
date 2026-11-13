@@ -1,1 +1,195 @@
-<p>dashboard works!</p>
+  <!-- ===== MAIN ===== -->
+  <main class="min-w-0 flex-1 space-y-6 p-4 sm:p-6 lg:p-8">
+
+    <!-- Header -->
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-sm text-navy/60">Pannello proprietario</p>
+        <h1 class="font-serif text-3xl text-navy sm:text-4xl">Richieste di prenotazione</h1>
+      </div>
+      <label class="flex min-h-11 w-full items-center gap-2 rounded-xl border border-[#DDD8CD] bg-white px-4 sm:w-72">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A6170" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input type="search" placeholder="Cerca nome, email, barca…" [value]="search()"
+               (input)="search.set($any($event.target).value)"
+               class="w-full bg-transparent py-2 text-sm text-navy outline-none">
+      </label>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div class="rounded-2xl bg-white p-4"><p class="text-xs text-navy/60">In attesa</p><p class="mt-1 text-3xl font-semibold text-amber-700">{{ counts().pending }}</p></div>
+      <div class="rounded-2xl bg-white p-4"><p class="text-xs text-navy/60">Accettate</p><p class="mt-1 text-3xl font-semibold text-emerald-700">{{ counts().accepted }}</p></div>
+      <div class="rounded-2xl bg-white p-4"><p class="text-xs text-navy/60">Rifiutate</p><p class="mt-1 text-3xl font-semibold text-red-700">{{ counts().declined }}</p></div>
+      <div class="rounded-2xl bg-white p-4"><p class="text-xs text-navy/60">Totale</p><p class="mt-1 text-3xl font-semibold text-navy">{{ counts().all }}</p></div>
+    </div>
+
+    @if (loadError()) {
+      <p class="rounded-2xl bg-red-50 p-4 text-sm text-red-700">
+        Impossibile caricare le richieste. Controlla che questo account sia nella collezione <code>admins</code>.
+      </p>
+    }
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
+
+      <!-- ===== LIST ===== -->
+      <section class="min-w-0 overflow-hidden rounded-2xl bg-white">
+        <div class="flex flex-wrap gap-1.5 border-b border-[#ECE8DF] p-3">
+          @for (t of tabs; track t.id) {
+            <button type="button" (click)="tab.set(t.id)"
+                    class="rounded-full px-4 py-2 text-sm transition"
+                    [class]="tab() === t.id ? 'bg-navy font-semibold text-white' : 'bg-[#F3F1EC] text-navy/70 hover:text-navy'">
+              {{ t.label }}
+              @if (t.id === 'pending' && counts().pending) { ({{ counts().pending }}) }
+            </button>
+          }
+        </div>
+
+        @if (loading()) {
+          <div class="space-y-2 p-4">
+            @for (i of [1,2,3,4]; track i) { <div class="h-16 animate-pulse rounded-xl bg-[#F3F1EC]"></div> }
+          </div>
+        } @else if (!list().length) {
+          <p class="p-10 text-center text-sm text-navy/60">Nessuna richiesta.</p>
+        } @else {
+          <ul class="divide-y divide-[#F1EEE7]">
+            @for (r of list(); track r.id) {
+              <li>
+                <button type="button" (click)="select(r)"
+                        class="grid w-full grid-cols-[1fr_auto] items-center gap-3 px-4 py-3.5 text-left transition hover:bg-[#FAF8F4] sm:grid-cols-[1.3fr_1.3fr_auto_auto]"
+                        [class.bg-sand]="selected()?.id === r.id">
+                  <span class="min-w-0">
+                    <span class="block truncate font-semibold text-navy">{{ r.name }}</span>
+                    <span class="block truncate text-xs text-navy/60">{{ r.pax }} pers. · {{ expLabel(r.experience) }}</span>
+                  </span>
+                  <span class="hidden min-w-0 text-sm sm:block">
+                    <span class="block truncate font-medium text-navy">{{ r.boatName }}</span>
+                    <span class="block text-xs capitalize text-navy/60">{{ dateLabel(r.date) }} · {{ slotLabel(r.slot) }}</span>
+                  </span>
+                  <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ statusInfo[r.status].badge }}">
+                    {{ statusInfo[r.status].label }}
+                  </span>
+                  <span class="hidden text-right text-xs text-navy/50 sm:block">{{ ago(r.createdAt) }}</span>
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- ===== DETAIL ===== -->
+      <aside id="detail" class="min-w-0 lg:sticky lg:top-8 lg:self-start">
+        @let s = selected();
+        @if (s) {
+          <div class="space-y-5 rounded-2xl bg-white p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <h2 class="truncate font-serif text-2xl text-navy">{{ s.name }}</h2>
+                <p class="text-xs text-navy/50">Ricevuta {{ ago(s.createdAt) }}</p>
+              </div>
+              <span class="shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold {{ statusInfo[s.status].badge }}">
+                {{ statusInfo[s.status].label }}
+              </span>
+            </div>
+
+            <!-- Quick contact -->
+            <div class="grid grid-cols-3 gap-2">
+              <a [href]="'tel:' + s.phone" class="flex flex-col items-center gap-1 rounded-xl bg-sand py-2.5 text-xs font-semibold text-navy hover:bg-mist">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+                Chiama
+              </a>
+              <a [href]="whatsapp(s)" target="_blank" rel="noopener" class="flex flex-col items-center gap-1 rounded-xl bg-emerald-50 py-2.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-100">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 21l1.6-4.8A8.5 8.5 0 1 1 8 19.6z"/></svg>
+                WhatsApp
+              </a>
+              <a [href]="mailto(s)" class="flex flex-col items-center gap-1 rounded-xl bg-sand py-2.5 text-xs font-semibold text-navy hover:bg-mist">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg>
+                Email
+              </a>
+            </div>
+
+            <dl class="grid grid-cols-[100px_1fr] gap-x-3 gap-y-2.5 text-sm">
+              <dt class="text-navy/50">Barca</dt><dd class="font-medium text-navy">{{ s.boatName }}</dd>
+              <dt class="text-navy/50">Data</dt><dd class="font-medium capitalize text-navy">{{ dateLabel(s.date, true) }}</dd>
+              <dt class="text-navy/50">Durata</dt><dd class="font-medium text-navy">{{ slotLabel(s.slot) }} <span class="text-navy/50">({{ slotHours(s.slot) }})</span></dd>
+              <dt class="text-navy/50">Persone</dt><dd class="font-medium text-navy">{{ s.pax }}</dd>
+              <dt class="text-navy/50">Esperienza</dt><dd class="font-medium text-navy">{{ expLabel(s.experience) }}</dd>
+              @if (s.licenseNumber) { <dt class="text-navy/50">Patente</dt><dd class="font-medium text-navy">{{ s.licenseNumber }}</dd> }
+              <dt class="text-navy/50">Skipper</dt><dd class="font-medium text-navy">{{ s.skipper ? 'Sì, richiesto' : 'No' }}</dd>
+              <dt class="text-navy/50">Email</dt><dd class="truncate text-navy">{{ s.email }}</dd>
+              <dt class="text-navy/50">Telefono</dt><dd class="text-navy">{{ s.phone }}</dd>
+              <dt class="text-navy/50">Lingua</dt><dd class="uppercase text-navy">{{ s.lang }}</dd>
+              <dt class="text-navy/50">Storico</dt>
+              <dd class="text-navy">
+                @if (history().total) { {{ history().total }} richieste precedenti · {{ history().accepted }} accettate }
+                @else { Nuovo cliente }
+              </dd>
+            </dl>
+
+            @if (s.message) {
+              <p class="rounded-xl bg-[#F7F5F0] px-4 py-3 text-sm leading-relaxed text-navy/80">“{{ s.message }}”</p>
+            }
+
+            <!-- Weather for that day -->
+            @let fc = forecast();
+            @if (fc?.loading) {
+              <div class="h-14 animate-pulse rounded-xl bg-[#F3F1EC]"></div>
+            } @else if (fc?.f; as f) {
+              <div class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm {{ weatherInfo[f.status].box }}">
+                <span class="h-2.5 w-2.5 shrink-0 rounded-full {{ weatherInfo[f.status].dot }}"></span>
+                <span><strong>{{ weatherInfo[f.status].label }}</strong> · {{ f.tMax }}° · vento {{ f.windMax }} kn
+                  @if (f.waveMax !== null) { · onde {{ f.waveMax | number: '1.1-1' }} m }
+                </span>
+              </div>
+            } @else {
+              <p class="rounded-xl bg-[#F3F1EC] px-4 py-3 text-xs text-navy/60">Previsioni meteo non ancora disponibili per questa data.</p>
+            }
+
+            <!-- Conflicts -->
+            @if (conflicts().length) {
+              <div class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <strong>⚠ {{ conflicts().length }} altra/e richiesta/e</strong> per la stessa barca e lo stesso slot:
+                <ul class="mt-1 list-inside list-disc text-xs">
+                  @for (c of conflicts(); track c.id) {
+                    <li>{{ c.name }} – {{ slotLabel(c.slot) }} ({{ statusInfo[c.status].label }})</li>
+                  }
+                </ul>
+              </div>
+            }
+
+            <!-- Decision -->
+            @if (s.status === 'pending') {
+              <label class="block">
+                <span class="mb-1 block text-sm font-semibold text-navy">Nota per il cliente</span>
+                <textarea rows="2" [value]="note()" (input)="note.set($any($event.target).value)"
+                          placeholder="Es. appuntamento al pontile B alle 8:45…"
+                          class="w-full resize-none rounded-xl border border-mist bg-sand/50 px-4 py-3 text-sm text-navy outline-none focus:border-ocean focus:bg-white"></textarea>
+              </label>
+
+              <div class="grid grid-cols-2 gap-3">
+                <button type="button" (click)="decline()" [disabled]="busy()"
+                        class="min-h-12 rounded-xl border-2 border-red-700 font-semibold text-red-700 transition hover:bg-red-50 disabled:opacity-50">
+                  Rifiuta
+                </button>
+                <button type="button" (click)="accept()" [disabled]="busy()"
+                        class="min-h-12 rounded-xl bg-[#0A6B6B] font-semibold text-white transition hover:bg-[#075858] disabled:opacity-50">
+                  Accetta
+                </button>
+              </div>
+              <p class="text-xs text-navy/50">Accettando, lo slot viene bloccato nel calendario pubblico.</p>
+            } @else if (s.adminNote) {
+              <p class="rounded-xl bg-[#F7F5F0] px-4 py-3 text-sm text-navy/80"><strong>Nota:</strong> {{ s.adminNote }}</p>
+            }
+
+            @if (feedback(); as fb) {
+              <p class="rounded-xl px-4 py-3 text-sm"
+                 [class]="fb.type === 'ok' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'" role="status">
+                {{ fb.text }}
+              </p>
+            }
+          </div>
+        } @else if (!loading()) {
+          <div class="rounded-2xl bg-white p-10 text-center text-sm text-navy/60">Seleziona una richiesta.</div>
+        }
+      </aside>
+    </div>
+  </main>

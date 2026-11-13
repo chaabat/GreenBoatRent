@@ -7,6 +7,7 @@ import { Boat } from '../../core/models/boat';
 import { EXPERIENCES, Experience, SLOTS, Slot } from '../../core/models/reservation';
 import { ReservationService } from '../../core/services/reservation';
 import { DayForecast, SeaStatus, WeatherService } from '../../core/services/weather';
+import { SettingsService } from '../../core/services/settings';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const toIso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -27,6 +28,10 @@ export class BookingForm implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private reservations = inject(ReservationService);
   private weather = inject(WeatherService);
+  private settings = inject(SettingsService);
+
+  /** form = booking form + WhatsApp, whatsapp = WhatsApp only */
+  mode = computed(() => this.settings.settings().bookingMode);
 
   slots = SLOTS;
   experiences = EXPERIENCES;
@@ -167,6 +172,16 @@ export class BookingForm implements OnInit {
     } finally {
       this.sending.set(false);
     }
+  }
+
+  /** WhatsApp link with boat / date / slot / people pre-filled */
+  waLink(): string {
+    const b = this.boat();
+    let text = `Ciao! Vorrei prenotare la ${b.name}`;
+    if (this.date()) text += ` per ${this.dateLabel()}`;
+    if (this.slot()) text += ` (${this.slotLabel()})`;
+    text += `, ${this.form.controls.pax.value} persone. È disponibile?`;
+    return this.settings.whatsappUrl(text);
   }
 
   reset() {

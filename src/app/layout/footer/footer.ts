@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BOATS } from '../../core/data/boats';
+import { BoatService } from '../../core/services/boat';
 
 @Component({
   selector: 'app-footer',
@@ -10,7 +10,7 @@ import { BOATS } from '../../core/data/boats';
 })
 export class Footer {
   year = new Date().getFullYear();
-  boats = BOATS;
+  boats = inject(BoatService).boats;
   private sanitizer = inject(DomSanitizer);
 
   mapLink = 'https://maps.app.goo.gl/B9YQj3kDp6tYFnjq6';

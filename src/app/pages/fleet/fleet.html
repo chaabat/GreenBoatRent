@@ -37,7 +37,7 @@
 
   <!-- Filters -->
   <div class="flex flex-wrap justify-center gap-2" role="tablist">
-    @for (f of filters; track f.id) {
+    @for (f of visibleFilters(); track f.id) {
       <button type="button" role="tab" (click)="filter.set(f.id)"
               [attr.aria-selected]="filter() === f.id"
               class="rounded-full px-5 py-2.5 text-sm font-semibold transition"
@@ -52,7 +52,9 @@
   </p>
 
   <!-- Grid -->
-  @if (boats().length) {
+  @if (!loaded()) {
+    <div class="mt-20 flex justify-center"><span class="h-10 w-10 animate-spin rounded-full border-4 border-navy/15 border-t-gold"></span></div>
+  } @else if (boats().length) {
     <div class="mt-16 grid gap-x-8 gap-y-20 sm:mt-24 sm:grid-cols-2 sm:gap-y-28 lg:grid-cols-3">
       @for (b of boats(); track b.id) {
         <app-boat-card [boat]="b" />

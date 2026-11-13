@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { BoatCard } from '../../shared/boat-card/boat-card';
 import { SeaConditions } from '../../shared/sea-conditions/sea-conditions';
-import { BOATS } from '../../core/data/boats';
+import { BoatService } from '../../core/services/boat';
 import { DESTINATIONS } from '../../core/data/destinations';
 
 @Component({
@@ -12,7 +12,7 @@ import { DESTINATIONS } from '../../core/data/destinations';
   templateUrl: './home.html'
 })
 export class Home {
-  boats = BOATS;
+  boats = inject(BoatService).boats;
   destinations = DESTINATIONS;
 
   perks = [

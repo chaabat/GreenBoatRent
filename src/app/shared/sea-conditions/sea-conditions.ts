@@ -7,7 +7,7 @@ type State = { ok: true; c: Conditions } | { ok: false };
 
 @Component({
   selector: 'app-sea-conditions',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, NgTemplateOutlet],
   templateUrl: './sea-conditions.html'
 })
 export class SeaConditions {

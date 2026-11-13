@@ -1,6 +1,10 @@
 @let b = boat();
 
-@if (!b) {
+@if (!loaded()) {
+  <section class="flex min-h-[70vh] items-center justify-center bg-navy">
+    <span class="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-gold"></span>
+  </section>
+} @else if (!b) {
   <section class="mx-auto max-w-xl px-5 pt-40 pb-32 text-center">
     <h1 class="font-serif text-4xl text-navy">Barca non trovata</h1>
     <a routerLink="/flotta" class="mt-6 inline-block rounded-full bg-navy px-6 py-3 font-semibold text-white">Vedi la flotta</a>

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BOATS } from '../../core/data/boats';
+import { BoatService } from '../../core/services/boat';
 
 @Component({
   selector: 'app-search-bar',
@@ -9,7 +9,7 @@ import { BOATS } from '../../core/data/boats';
 export class SearchBar {
   private router = inject(Router);
 
-  boats = BOATS;
+  boats = inject(BoatService).boats;
   paxOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   today = new Date().toISOString().split('T')[0];
 

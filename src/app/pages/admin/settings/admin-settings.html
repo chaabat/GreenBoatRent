@@ -1,0 +1,61 @@
+<main class="max-w-3xl space-y-6 p-4 sm:p-6 lg:p-8">
+  <div>
+    <p class="text-sm text-navy/60">Pannello proprietario</p>
+    <h1 class="font-serif text-3xl text-navy sm:text-4xl">Impostazioni</h1>
+  </div>
+
+  @if (!loaded()) {
+    <div class="flex justify-center py-16"><span class="h-10 w-10 animate-spin rounded-full border-4 border-navy/15 border-t-gold"></span></div>
+  } @else {
+    <!-- Booking mode -->
+    <section class="space-y-4 rounded-2xl bg-white p-5 sm:p-7">
+      <div>
+        <h2 class="font-serif text-2xl text-navy">Modalità di prenotazione</h2>
+        <p class="mt-1 text-sm text-navy/60">Scegli come i clienti prenotano dal sito. WhatsApp è sempre attivo.</p>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Modalità di prenotazione">
+        @for (m of modes; track m.id) {
+          <button type="button" role="radio" [attr.aria-checked]="mode() === m.id" (click)="mode.set(m.id)"
+                  class="rounded-2xl border-2 p-5 text-left transition"
+                  [class]="mode() === m.id ? 'border-navy bg-sand' : 'border-mist bg-white hover:border-ocean'">
+            <span class="flex items-center gap-3">
+              <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2"
+                    [class]="mode() === m.id ? 'border-navy' : 'border-navy/30'">
+                @if (mode() === m.id) { <span class="h-2.5 w-2.5 rounded-full bg-navy"></span> }
+              </span>
+              <span class="font-semibold text-navy">{{ m.title }}</span>
+            </span>
+            <span class="mt-2 block pl-8 text-sm leading-relaxed text-navy/70">{{ m.text }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- WhatsApp -->
+    <section class="space-y-4 rounded-2xl bg-white p-5 sm:p-7">
+      <div>
+        <h2 class="font-serif text-2xl text-navy">Numero WhatsApp</h2>
+        <p class="mt-1 text-sm text-navy/60">Formato internazionale, solo cifre, senza + (es. <strong>393791869281</strong>).</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <input type="tel" [value]="whatsapp()" (input)="whatsapp.set($any($event.target).value)"
+               class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white sm:max-w-xs">
+        <a [href]="testLink()" target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366]/10 px-4 py-3 text-sm font-semibold text-[#128C4A] hover:bg-[#25D366]/20">
+          Prova il link
+        </a>
+      </div>
+    </section>
+
+    @if (feedback(); as fb) {
+      <p class="rounded-xl px-4 py-3 text-sm" role="status"
+         [class]="fb.type === 'ok' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'">{{ fb.text }}</p>
+    }
+
+    <button type="button" (click)="save()" [disabled]="saving()"
+            class="rounded-full bg-navy px-8 py-3.5 font-semibold text-white transition hover:bg-ocean disabled:opacity-60">
+      {{ saving() ? 'Salvataggio…' : 'Salva impostazioni' }}
+    </button>
+  }
+</main>

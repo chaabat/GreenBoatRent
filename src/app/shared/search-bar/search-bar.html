@@ -19,7 +19,7 @@
       <select [value]="boat()" (change)="boat.set($any($event.target).value)"
               class="w-full cursor-pointer bg-transparent text-sm text-navy/70 outline-none">
         <option value="">Tutte le imbarcazioni</option>
-        @for (b of boats; track b.id) {
+        @for (b of boats(); track b.id) {
           <option [value]="b.id">{{ b.name }}</option>
         }
       </select>

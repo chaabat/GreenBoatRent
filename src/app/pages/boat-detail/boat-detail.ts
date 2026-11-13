@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BOATS } from '../../core/data/boats';
+import { BoatService } from '../../core/services/boat';
 import { BookingForm } from '../../shared/booking-form/booking-form';
 import { BoatCard } from '../../shared/boat-card/boat-card';
 
@@ -14,10 +14,12 @@ export class BoatDetail {
   private route = inject(ActivatedRoute);
   private params = toSignal(this.route.paramMap);
   private query = toSignal(this.route.queryParamMap);
+  private boatService = inject(BoatService);
+  loaded = this.boatService.loaded;
 
-  boat = computed(() => BOATS.find(b => b.id === this.params()?.get('id')));
+  boat = computed(() => this.boatService.boats().find(b => b.id === this.params()?.get('id')));
   initialDate = computed(() => this.query()?.get('date') ?? '');
-  others = computed(() => BOATS.filter(b => b.id !== this.boat()?.id).slice(0, 3));
+  others = computed(() => this.boatService.boats().filter(b => b.id !== this.boat()?.id).slice(0, 3));
 
   specs = computed(() => {
     const b = this.boat();

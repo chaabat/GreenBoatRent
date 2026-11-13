@@ -63,7 +63,7 @@
     <div>
       <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">La flotta</h3>
       <ul class="mt-5 space-y-3 text-sm">
-        @for (b of boats; track b.id) {
+        @for (b of boats(); track b.id) {
           <li>
             <a [routerLink]="['/flotta', b.id]" class="group inline-flex items-center gap-2 transition hover:text-white">
               <span class="h-px w-0 bg-gold transition-all group-hover:w-4"></span>{{ b.name }}
