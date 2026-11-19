@@ -10,6 +10,16 @@ const REQUIRED = [
   'FIREBASE_APP_ID'
 ];
 
+// Optional – owner notifications (empty = disabled)
+const OPTIONAL = [
+  'EMAILJS_SERVICE_ID',
+  'EMAILJS_TEMPLATE_ID',
+  'EMAILJS_CLIENT_TEMPLATE_ID',
+  'EMAILJS_PUBLIC_KEY',
+  'CALLMEBOT_PHONE',
+  'CALLMEBOT_APIKEY'
+];
+
 // 1. Load .env (if present)
 const env = {};
 if (existsSync('.env')) {
@@ -20,7 +30,7 @@ if (existsSync('.env')) {
 }
 
 // 2. Real environment variables win (Docker, CI, hosting)
-for (const k of REQUIRED) if (process.env[k]) env[k] = process.env[k];
+for (const k of [...REQUIRED, ...OPTIONAL]) if (process.env[k]) env[k] = process.env[k];
 
 // 3. Check
 const missing = REQUIRED.filter(k => !env[k] || env[k].startsWith('PASTE'));
@@ -28,6 +38,7 @@ if (missing.length) {
   console.error(`\n❌ Missing in .env: ${missing.join(', ')}\n`);
   process.exit(1);
 }
+const opt = k => JSON.stringify(env[k] && !env[k].startsWith('PASTE') ? env[k] : '');
 
 // 4. Write environment.ts
 mkdirSync('src/environments', { recursive: true });
@@ -41,7 +52,20 @@ export const environment = {
     storageBucket: '${env.FIREBASE_STORAGE_BUCKET}',
     messagingSenderId: '${env.FIREBASE_MESSAGING_SENDER_ID}',
     appId: '${env.FIREBASE_APP_ID}'
+  },
+  notify: {
+    emailjs: {
+      serviceId: ${opt('EMAILJS_SERVICE_ID')},
+      templateId: ${opt('EMAILJS_TEMPLATE_ID')},
+      clientTemplateId: ${opt('EMAILJS_CLIENT_TEMPLATE_ID')},
+      publicKey: ${opt('EMAILJS_PUBLIC_KEY')}
+    },
+    callmebot: {
+      phone: ${opt('CALLMEBOT_PHONE')},
+      apiKey: ${opt('CALLMEBOT_APIKEY')}
+    }
   }
 };
 `);
-console.log('✅ src/environments/environment.ts generated from .env');
+const on = [opt('EMAILJS_PUBLIC_KEY') !== '""' && 'email', opt('CALLMEBOT_APIKEY') !== '""' && 'whatsapp'].filter(Boolean);
+console.log(`✅ src/environments/environment.ts generated from .env (notifications: ${on.join(' + ') || 'off'})`);

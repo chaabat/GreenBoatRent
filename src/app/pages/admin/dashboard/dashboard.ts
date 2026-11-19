@@ -1,6 +1,6 @@
-import { Component, computed, inject, isDevMode, signal } from '@angular/core';
+import { Component, computed, effect, inject, isDevMode, signal, untracked } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, startWith, switchMap } from 'rxjs';
 import { ReservationService } from '../../../core/services/reservation';
@@ -19,6 +19,8 @@ export class Dashboard {
   private service = inject(ReservationService);
   private weather = inject(WeatherService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private linkId = toSignal(this.route.queryParamMap.pipe(map(p => p.get('r'))));
   auth = inject(AuthService);
 
   // ---------- Data (live) ----------
@@ -107,6 +109,19 @@ export class Dashboard {
     accepted: { label: 'Accettata', badge: 'bg-emerald-100 text-emerald-800' },
     declined: { label: 'Rifiutata', badge: 'bg-red-100 text-red-800' }
   };
+
+  /** Link from email/WhatsApp: /admin?r=ID → open that request */
+  private openFromLink = effect(() => {
+    const id = this.linkId();
+    const r = id ? this.all().find(x => x.id === id) : undefined;
+    if (!r) return;
+    untracked(() => {
+      this.tab.set(r.status);
+      this.select(r);
+      this.router.navigate([], { queryParams: { r: null }, queryParamsHandling: 'merge', replaceUrl: true });
+      setTimeout(() => document.getElementById('detail')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    });
+  });
 
   // ---------- Helpers ----------
   slotLabel(id: string) { return SLOTS.find(s => s.id === id)?.label ?? id; }

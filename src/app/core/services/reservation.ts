@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
 import { db, dbLite } from '../firebase';
 import * as lite from 'firebase/firestore/lite';
 import { Reservation, ReservationRequest, Slot } from '../models/reservation';
+import { NotifyService } from './notify';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
@@ -11,6 +12,7 @@ const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${pad(
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
   private reservations = collection(db, 'reservations');
+  private notify = inject(NotifyService);
 
   // ================= PUBLIC =================
 
@@ -22,6 +24,8 @@ export class ReservationService {
       status: 'pending',
       createdAt: lite.serverTimestamp()
     });
+    this.notify.newReservation(ref.id, req); // email + WhatsApp to the owner
+    this.notify.client('received', req);       // confirmation email to the client
     return ref.id;
   }
 
@@ -67,6 +71,7 @@ export class ReservationService {
     batch.set(availRef, { boatId: r.boatId, date: r.date, slots: lite.arrayUnion(r.slot) }, { merge: true });
     batch.update(resRef, { status: 'accepted', adminNote, decidedAt: lite.serverTimestamp() });
     await batch.commit();
+    this.notify.client('accepted', r, adminNote);
   }
 
   /** Decline – Lite SDK */
@@ -74,5 +79,6 @@ export class ReservationService {
     await lite.updateDoc(lite.doc(dbLite, 'reservations', r.id), {
       status: 'declined', adminNote, decidedAt: lite.serverTimestamp()
     });
+    this.notify.client('declined', r, adminNote);
   }
 }

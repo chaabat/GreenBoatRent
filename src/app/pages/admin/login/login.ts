@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
@@ -11,6 +11,13 @@ import { AuthService } from '../../../core/services/auth';
 export class Login {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  /** Only internal /admin URLs (no open redirect) */
+  private get returnUrl(): string {
+    const u = this.route.snapshot.queryParamMap.get('returnUrl') ?? '';
+    return u.startsWith('/admin') && !u.startsWith('//') ? u : '/admin';
+  }
   private fb = inject(NonNullableFormBuilder);
 
   form = this.fb.group({
@@ -24,7 +31,7 @@ export class Login {
 
   constructor() {
     // Already logged in → go straight to dashboard
-    this.auth.ready.then(() => { if (this.auth.isAdmin()) this.router.navigate(['/admin']); });
+    this.auth.ready.then(() => { if (this.auth.isAdmin()) this.router.navigateByUrl(this.returnUrl); });
   }
 
   async submit() {
@@ -34,7 +41,7 @@ export class Login {
     const { email, password } = this.form.getRawValue();
     try {
       await this.auth.login(email.trim(), password);
-      this.router.navigate(['/admin']);
+      this.router.navigateByUrl(this.returnUrl);
     } catch (e: any) {
       const code: string = e?.code ?? e?.message ?? '';
       this.error.set(
