@@ -40,7 +40,7 @@ export class BoatDetail {
     const list = ['Dotazioni di sicurezza', 'Briefing prima della partenza', 'Assistenza durante la giornata'];
     if (b.shower) list.push('Doccia a bordo');
     if (b.cabins) list.push(b.cabins);
-    if (b.license === 'skipper' || b.license === 'crew') list.push('Skipper / equipaggio incluso');
+    if (b.license === 'crew') list.push('Equipaggio incluso');
     return list;
   });
 }

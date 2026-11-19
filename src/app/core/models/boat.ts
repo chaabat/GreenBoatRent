@@ -1,4 +1,4 @@
-export type LicenseType = 'none' | 'required' | 'skipper' | 'crew';
+export type LicenseType = 'none' | 'required' | 'crew';
 export type BoatCategory = 'gommone' | 'yacht';
 
 export interface Spot {
@@ -29,7 +29,6 @@ export interface Boat {
 export const LICENSES: { id: LicenseType; label: string }[] = [
   { id: 'none',     label: 'Senza patente' },
   { id: 'required', label: 'Con patente' },
-  { id: 'skipper',  label: 'Con skipper' },
   { id: 'crew',     label: 'Equipaggio' }
 ];
 

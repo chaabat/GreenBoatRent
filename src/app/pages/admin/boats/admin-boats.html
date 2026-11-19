@@ -30,32 +30,45 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
+      <p class="-mt-3 text-xs text-navy/50"><span class="text-red-600">*</span> campi obbligatori</p>
 
-      <!-- Photos (Cloudinary links) -->
+      @if (missing().length) {
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          <strong>Da completare:</strong> {{ missing().join(', ') }}
+        </div>
+      }
+
+      <!-- Photos -->
       <div class="grid gap-4 md:grid-cols-2">
         <div>
           <label class="block">
-            <span class="mb-1 block text-sm font-semibold text-navy">Link foto di sfondo <span class="font-normal text-navy/50">(verticale)</span></span>
-            <input formControlName="cover" type="url" placeholder="https://res.cloudinary.com/…/image/upload/…/tempest-bg.jpg"
-                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-sm text-navy outline-none focus:bg-white"
-                   [class]="invalid('cover') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+            <span class="mb-1 block text-sm font-semibold text-navy">Link foto di sfondo <span class="text-red-600">*</span> <span class="font-normal text-navy/50">(verticale)</span></span>
+            <input formControlName="cover" type="url" placeholder="https://res.cloudinary.com/…/tempest-bg.jpg" (input)="coverState.set('idle')"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white text-sm" [class]="errorFor('cover') ? 'border-red-400' : 'border-mist focus:border-ocean'">
           </label>
+          @if (errorFor('cover'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
           <div class="relative mt-2 flex aspect-[3/4] max-h-64 items-center justify-center overflow-hidden rounded-2xl bg-sand/60 text-xs text-navy/40">
-            @if (form.controls.cover.valid) { <img [src]="form.controls.cover.value" alt="" class="absolute inset-0 h-full w-full object-cover"> }
-            @else { Anteprima }
+            @if (form.controls.cover.valid) {
+              <img [src]="form.controls.cover.value" alt="" class="absolute inset-0 h-full w-full object-cover"
+                   (load)="coverState.set('ok')" (error)="coverState.set('error')">
+            } @else { Anteprima }
+            @if (coverState() === 'ok') { <span class="absolute right-2 top-2 rounded-full bg-emerald-500 px-2 py-0.5 text-[11px] font-semibold text-white">✓ OK</span> }
           </div>
         </div>
 
         <div>
           <label class="block">
-            <span class="mb-1 block text-sm font-semibold text-navy">Link barca scontornata <span class="font-normal text-navy/50">(PNG trasparente, prua a destra)</span></span>
-            <input formControlName="cutout" type="url" placeholder="https://res.cloudinary.com/…/image/upload/…/tempest.png"
-                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-sm text-navy outline-none focus:bg-white"
-                   [class]="invalid('cutout') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+            <span class="mb-1 block text-sm font-semibold text-navy">Link barca scontornata <span class="text-red-600">*</span> <span class="font-normal text-navy/50">(PNG trasparente, prua a destra)</span></span>
+            <input formControlName="cutout" type="url" placeholder="https://res.cloudinary.com/…/tempest.png" (input)="cutoutState.set('idle')"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white text-sm" [class]="errorFor('cutout') ? 'border-red-400' : 'border-mist focus:border-ocean'">
           </label>
+          @if (errorFor('cutout'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
           <div class="relative mt-2 flex aspect-[3/4] max-h-64 items-center justify-center overflow-hidden rounded-2xl bg-navy/90 text-xs text-white/40">
-            @if (form.controls.cutout.valid) { <img [src]="form.controls.cutout.value" alt="" class="absolute inset-0 m-auto w-11/12 object-contain"> }
-            @else { Anteprima }
+            @if (form.controls.cutout.valid) {
+              <img [src]="form.controls.cutout.value" alt="" class="absolute inset-0 m-auto w-11/12 object-contain"
+                   (load)="cutoutState.set('ok')" (error)="cutoutState.set('error')">
+            } @else { Anteprima }
+            @if (cutoutState() === 'ok') { <span class="absolute right-2 top-2 rounded-full bg-emerald-500 px-2 py-0.5 text-[11px] font-semibold text-white">✓ OK</span> }
           </div>
         </div>
       </div>
@@ -66,15 +79,17 @@
 
       <!-- Fields -->
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <label class="block sm:col-span-2 lg:col-span-1">
-          <span class="mb-1 block text-sm font-semibold text-navy">Nome</span>
-          <input formControlName="name" type="text"
-                 class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white"
-                 [class]="invalid('name') ? 'border-red-400' : 'border-mist focus:border-ocean'">
-        </label>
+        <div class="sm:col-span-2 lg:col-span-1">
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Nome <span class="text-red-600">*</span></span>
+            <input formControlName="name" type="text" placeholder="Capelli Tempest 530"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('name') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('name'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
 
         <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Tipo</span>
+          <span class="mb-1 block text-sm font-semibold text-navy">Tipo <span class="text-red-600">*</span></span>
           <select formControlName="category" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean">
             <option value="gommone">Gommone</option>
             <option value="yacht">Yacht</option>
@@ -82,46 +97,63 @@
         </label>
 
         <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Patente</span>
+          <span class="mb-1 block text-sm font-semibold text-navy">Patente <span class="text-red-600">*</span></span>
           <select formControlName="license" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean">
             @for (l of licenses; track l.id) { <option [value]="l.id">{{ l.label }}</option> }
           </select>
         </label>
 
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Persone (max)</span>
-          <input formControlName="pax" type="number" min="1" max="12"
-                 class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white"
-                 [class]="invalid('pax') ? 'border-red-400' : 'border-mist focus:border-ocean'">
-        </label>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Persone (max) <span class="text-red-600">*</span></span>
+            <input formControlName="pax" type="number" placeholder="6"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('pax') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('pax'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Lunghezza <span class="text-red-600">*</span></span>
+            <input formControlName="length" type="text" placeholder="5.35 m" (blur)="normalizeMeasure('length')"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('length') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('length'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Larghezza <span class="text-red-600">*</span></span>
+            <input formControlName="width" type="text" placeholder="2.26 m" (blur)="normalizeMeasure('width')"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('width') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('width'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Motore <span class="text-red-600">*</span></span>
+            <input formControlName="engine" type="text" placeholder="Yamaha 40 CV"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('engine') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('engine'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Serbatoio <span class="font-normal text-navy/50">(opz.)</span></span>
+            <input formControlName="tank" type="text" placeholder="45 L" (blur)="normalizeTank()"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('tank') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('tank'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
+        <div>
+          <label class="block">
+            <span class="mb-1 block text-sm font-semibold text-navy">Cabine <span class="font-normal text-navy/50">(opz.)</span></span>
+            <input formControlName="cabins" type="text" placeholder="1 cabina · 1 bagno"
+                   class="w-full rounded-xl border bg-sand/50 px-4 py-3 text-navy outline-none focus:bg-white" [class]="errorFor('cabins') ? 'border-red-400' : 'border-mist focus:border-ocean'">
+          </label>
+          @if (errorFor('cabins'); as err) { <p class="mt-1 text-xs text-red-600">{{ err }}</p> }
+        </div>
 
         <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Lunghezza</span>
-          <input formControlName="length" type="text" placeholder="5.35 m" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white">
-        </label>
-
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Larghezza</span>
-          <input formControlName="width" type="text" placeholder="2.26 m" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white">
-        </label>
-
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Motore</span>
-          <input formControlName="engine" type="text" placeholder="Yamaha 40 CV" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white">
-        </label>
-
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Serbatoio <span class="font-normal text-navy/50">(opz.)</span></span>
-          <input formControlName="tank" type="text" placeholder="45 L" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white">
-        </label>
-
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Cabine <span class="font-normal text-navy/50">(opz.)</span></span>
-          <input formControlName="cabins" type="text" placeholder="1 cabina · 1 bagno" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean focus:bg-white">
-        </label>
-
-        <label class="block">
-          <span class="mb-1 block text-sm font-semibold text-navy">Luogo mostrato al passaggio</span>
+          <span class="mb-1 block text-sm font-semibold text-navy">Luogo mostrato al passaggio <span class="text-red-600">*</span></span>
           <select formControlName="spotIndex" class="w-full rounded-xl border border-mist bg-sand/50 px-4 py-3 text-navy outline-none focus:border-ocean">
             @for (s of spots; track s.name; let i = $index) { <option [ngValue]="i">{{ s.name }}</option> }
           </select>
@@ -137,6 +169,11 @@
           <span class="text-sm text-navy">Visibile sul sito</span>
         </label>
       </div>
+
+      <!-- Warnings (non-blocking) -->
+      @for (w of warnings(); track w) {
+        <p class="flex gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">⚠ {{ w }}</p>
+      }
 
       <div class="flex flex-wrap justify-end gap-3">
         <button type="button" (click)="close()" class="rounded-full border border-navy/20 px-6 py-3 text-sm font-semibold text-navy hover:bg-sand">Annulla</button>

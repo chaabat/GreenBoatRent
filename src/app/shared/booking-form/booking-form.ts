@@ -40,7 +40,7 @@ export class BookingForm implements OnInit {
 
   month = signal(startOfMonth(new Date()));
   date = signal('');
-  slot = signal<Slot | null>(null);
+  slot = signal<Slot | null>('full'); // only full day 9:00 – 18:00
   taken = signal<Record<string, Slot[]>>({});
   sending = signal(false);
   sent = signal(false);
@@ -53,7 +53,6 @@ export class BookingForm implements OnInit {
     pax: [2, [Validators.required, Validators.min(1)]],
     experience: ['first' as Experience, Validators.required],
     licenseNumber: [''],
-    skipper: [false],
     message: [''],
     gdpr: [false, Validators.requiredTrue]
   });
@@ -70,8 +69,8 @@ export class BookingForm implements OnInit {
     for (let d = 1; d <= count; d++) {
       const iso = toIso(new Date(m.getFullYear(), m.getMonth(), d));
       const t = this.taken()[iso] ?? [];
-      const full = t.includes('full') || (t.includes('morning') && t.includes('afternoon'));
-      cells.push({ iso, day: d, disabled: iso < this.today || full, selected: iso === this.date(), partial: !full && t.length > 0 });
+      const full = t.length > 0; // any accepted booking blocks the whole day
+      cells.push({ iso, day: d, disabled: iso < this.today || full, selected: iso === this.date(), partial: false });
     }
     return cells;
   });
@@ -121,8 +120,6 @@ export class BookingForm implements OnInit {
   pickDate(c: DayCell) {
     if (c.disabled) return;
     this.date.set(c.iso);
-    const s = this.slot();
-    if (s && this.slotTaken(s)) this.slot.set(null);
   }
 
   slotTaken(s: Slot): boolean {
@@ -137,12 +134,12 @@ export class BookingForm implements OnInit {
 
   async submit() {
     this.error.set('');
-    if (!this.date() || !this.slot()) { this.error.set('Seleziona la data e la durata.'); return; }
+    if (!this.date() || !this.slot()) { this.error.set('Seleziona la data.'); return; }
     if (this.form.invalid) { this.form.markAllAsTouched(); this.error.set('Controlla i campi evidenziati.'); return; }
 
     const v = this.form.getRawValue();
-    if (this.needsLicense() && !v.skipper && !v.licenseNumber.trim()) {
-      this.error.set('Per questa barca serve la patente nautica, oppure richiedi lo skipper.');
+    if (this.needsLicense() && !v.licenseNumber.trim()) {
+      this.error.set('Per questa barca serve il numero della patente nautica.');
       return;
     }
 
@@ -162,7 +159,6 @@ export class BookingForm implements OnInit {
         phone: v.phone.trim(),
         experience: v.experience,
         licenseNumber: v.licenseNumber.trim() || undefined,
-        skipper: v.skipper,
         message: v.message.trim() || undefined,
         lang
       });
@@ -186,7 +182,7 @@ export class BookingForm implements OnInit {
 
   reset() {
     this.sent.set(false);
-    this.slot.set(null);
+    this.slot.set('full');
     this.form.reset({ pax: Math.min(2, this.boat().pax), experience: 'first' });
   }
 }
