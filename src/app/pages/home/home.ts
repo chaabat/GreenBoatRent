@@ -1,14 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Ocean } from '../../shared/ocean/ocean';
 import { SearchBar } from '../../shared/search-bar/search-bar';
-import { BoatCard } from '../../shared/boat-card/boat-card';
+import { FleetShowcase } from '../../shared/fleet-showcase/fleet-showcase';
 import { SeaConditions } from '../../shared/sea-conditions/sea-conditions';
 import { BoatService } from '../../core/services/boat';
 import { DESTINATIONS } from '../../core/data/destinations';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SearchBar, BoatCard, SeaConditions],
+  imports: [RouterLink, Ocean, SearchBar, FleetShowcase, SeaConditions],
   templateUrl: './home.html'
 })
 export class Home {

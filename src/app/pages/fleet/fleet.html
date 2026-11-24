@@ -1,9 +1,12 @@
+<app-ocean [greet]="true">
 <!-- PAGE HERO -->
-<section class="relative overflow-hidden bg-navy">
-  <img src="images/spots/arcipelago.jpg" alt="" class="absolute inset-0 h-full w-full object-cover opacity-60">
-  <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/70 to-navy/20"></div>
+<section class="relative">
+  <div class="fade-bottom absolute inset-0">
+    <img src="images/spots/arcipelago.jpg" alt="" class="h-full w-full object-cover opacity-60">
+    <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/70 to-navy/20"></div>
+  </div>
 
-  <div class="relative mx-auto max-w-7xl px-5 pt-36 pb-20 lg:px-8">
+  <div class="relative mx-auto max-w-7xl px-5 pt-36 pb-24 lg:px-8">
     <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
       <span class="h-px w-8 bg-gold"></span> La nostra flotta
     </p>
@@ -13,25 +16,21 @@
     </p>
   </div>
 
-  <!-- wave -->
-  <svg class="absolute -bottom-px left-0 block h-10 w-full text-sand sm:h-14" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-    <path fill="currentColor" d="M0 80h1440V48c-120-26-240-40-360-30S840 60 720 54 480 10 360 14 120 50 0 40z"/>
-  </svg>
 </section>
 
 <section class="mx-auto max-w-7xl px-5 pt-10 pb-28 lg:px-8">
 
   <!-- Active search (from Home) -->
   @if (date() || pax()) {
-    <div class="mb-8 flex flex-wrap items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-sm">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6E8C" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <span class="text-sm text-navy">
+    <div class="glass mb-8 flex flex-wrap items-center gap-3 px-5 py-4">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <span class="text-sm text-white">
         @if (date()) { Disponibilità per <strong class="capitalize">{{ dateLabel() }}</strong> }
         @if (date() && pax()) { · }
         @if (pax()) { <strong>{{ pax() }}</strong> {{ pax() === 1 ? 'persona' : 'persone' }} }
       </span>
       <button type="button" (click)="clearSearch()"
-              class="ml-auto text-sm font-semibold text-ocean hover:underline">Cancella</button>
+              class="ml-auto text-sm font-semibold text-gold hover:underline">Cancella</button>
     </div>
   }
 
@@ -41,19 +40,19 @@
       <button type="button" role="tab" (click)="filter.set(f.id)"
               [attr.aria-selected]="filter() === f.id"
               class="rounded-full px-5 py-2.5 text-sm font-semibold transition"
-              [class]="filter() === f.id ? 'bg-navy text-white shadow-md' : 'bg-white text-navy hover:bg-mist'">
+              [class]="filter() === f.id ? 'bg-gold text-navy shadow-lg shadow-black/20' : 'border border-white/15 bg-white/5 text-white backdrop-blur hover:bg-white/15'">
         {{ f.label }}
       </button>
     }
   </div>
 
-  <p class="mt-4 text-center text-sm text-navy/60">
+  <p class="mt-4 text-center text-sm text-white/60">
     {{ boats().length }} {{ boats().length === 1 ? 'imbarcazione' : 'imbarcazioni' }}
   </p>
 
   <!-- Grid -->
   @if (!loaded()) {
-    <div class="mt-20 flex justify-center"><span class="h-10 w-10 animate-spin rounded-full border-4 border-navy/15 border-t-gold"></span></div>
+    <div class="mt-20 flex justify-center"><span class="h-10 w-10 animate-spin rounded-full border-4 border-white/15 border-t-gold"></span></div>
   } @else if (boats().length) {
     <div class="mt-16 grid gap-x-8 gap-y-20 sm:mt-24 sm:grid-cols-2 sm:gap-y-28 lg:grid-cols-3">
       @for (b of boats(); track b.id) {
@@ -61,13 +60,14 @@
       }
     </div>
   } @else {
-    <div class="mt-16 rounded-3xl bg-white p-10 text-center">
-      <p class="font-serif text-2xl text-navy">Nessuna imbarcazione trovata</p>
-      <p class="mt-2 text-sm text-navy/60">Prova a cambiare filtro o numero di persone.</p>
+    <div class="glass mt-16 p-10 text-center">
+      <p class="font-serif text-2xl text-white">Nessuna imbarcazione trovata</p>
+      <p class="mt-2 text-sm text-white/60">Prova a cambiare filtro o numero di persone.</p>
       <button type="button" (click)="filter.set('all'); clearSearch()"
-              class="mt-6 rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white hover:bg-ocean">
+              class="mt-6 rounded-full bg-gold px-6 py-3 text-sm font-semibold text-navy hover:bg-gold-dark">
         Mostra tutte
       </button>
     </div>
   }
 </section>
+</app-ocean>

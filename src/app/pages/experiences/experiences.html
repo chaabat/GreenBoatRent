@@ -1,1 +1,86 @@
-<p>experiences works!</p>
+<app-ocean [greet]="true">
+  <!-- HERO -->
+  <section class="relative">
+    <div class="fade-bottom absolute inset-0">
+      <img src="images/destinations/mortorio.jpg" alt="" class="h-full w-full object-cover opacity-70">
+      <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/60 to-navy/10"></div>
+    </div>
+    <div class="relative mx-auto max-w-7xl px-5 pt-36 pb-28 lg:px-8">
+      <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+        <span class="h-px w-8 bg-gold"></span> Le nostre esperienze
+      </p>
+      <h1 class="mt-4 font-serif text-5xl text-white sm:text-6xl">
+        La Sardegna più bella,<br><span class="italic text-gold">dal mare.</span>
+      </h1>
+      <p class="mt-4 max-w-lg text-lg text-white/80">
+        Scegli come vuoi vivere la tua giornata nell'Arcipelago della Maddalena.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCES -->
+  <section class="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-3">
+      @for (e of experiences; track e.title) {
+        <a routerLink="/flotta" [queryParams]="{ tipo: e.tipo }"
+           class="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[2rem] p-6 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+          <img [src]="e.image" alt="" loading="lazy"
+               class="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-transparent"></div>
+          <div class="relative">
+            <span class="rounded-full bg-gold px-3 py-1 text-xs font-semibold text-navy">{{ e.tag }}</span>
+            <h2 class="mt-3 font-serif text-3xl text-white">{{ e.title }}</h2>
+            <p class="mt-2 text-sm text-white/80">{{ e.text }}</p>
+            <span class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gold">
+              Vedi le barche
+              <svg class="transition group-hover:translate-x-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- A DAY AT SEA -->
+  <section class="mx-auto max-w-4xl px-5 pb-24">
+    <h2 class="text-center font-serif text-4xl text-white sm:text-5xl">La tua giornata in mare</h2>
+    <ol class="relative mt-12 space-y-8 border-l border-dashed border-gold/40 pl-8">
+      @for (step of day; track step.time) {
+        <li class="relative">
+          <span class="absolute -left-[41px] top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gold ring-4 ring-gold/20"></span>
+          <p class="font-serif text-2xl text-gold">{{ step.time }}</p>
+          <div class="glass mt-2 p-5">
+            <h3 class="font-semibold text-white">{{ step.title }}</h3>
+            <p class="mt-1 text-sm text-white/70">{{ step.text }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mx-auto max-w-3xl px-5 pb-24">
+    <h2 class="text-center font-serif text-4xl text-white">Domande frequenti</h2>
+    <div class="mt-10 space-y-3">
+      @for (f of faq; track f.q) {
+        <details class="glass group p-5 [&_summary::-webkit-details-marker]:hidden">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-white">
+            {{ f.q }}
+            <span class="text-2xl leading-none text-gold transition group-open:rotate-45">+</span>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/75">{{ f.a }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mx-auto max-w-3xl px-5 pb-32 text-center">
+    <h2 class="font-serif text-4xl text-white sm:text-5xl">Pronto a <span class="italic text-gold">salpare?</span></h2>
+    <a routerLink="/flotta"
+       class="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-navy transition hover:bg-gold-dark">
+      Scegli la tua barca
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </section>
+</app-ocean>

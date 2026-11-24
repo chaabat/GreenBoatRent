@@ -4,10 +4,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BoatService } from '../../core/services/boat';
 import { BookingForm } from '../../shared/booking-form/booking-form';
 import { BoatCard } from '../../shared/boat-card/boat-card';
+import { Ocean } from '../../shared/ocean/ocean';
 
 @Component({
   selector: 'app-boat-detail',
-  imports: [RouterLink, BookingForm, BoatCard],
+  imports: [RouterLink, BookingForm, BoatCard, Ocean],
   templateUrl: './boat-detail.html'
 })
 export class BoatDetail {

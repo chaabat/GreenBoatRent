@@ -13,6 +13,12 @@
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --animate-bob: bob 4s ease-in-out infinite;
+  --animate-shake: shake .4s ease-in-out;
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
   @keyframes bob {
     0%, 100% { transform: translateY(0) rotate(-1deg); }
     50%      { transform: translateY(-12px) rotate(1deg); }
@@ -22,3 +28,13 @@
 
 html { scroll-behavior: smooth; }
 body { @apply bg-sand text-navy font-sans antialiased; }
+/* Home is one continuous sea: hide the sand wave above the footer there */
+body:has(.ocean) .footer-wave { display: none; }
+
+/* ===== Ocean pages (shared/ocean) ===== */
+.ocean > :not(.ocean-decor, .ocean-front) { position: relative; z-index: 1; }
+/* photos melt into the sea, no hard edges */
+.fade-bottom { -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent); mask-image: linear-gradient(to bottom, #000 55%, transparent); }
+.fade-y      { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent); }
+/* frosted glass card on the sea */
+.glass { @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md; }

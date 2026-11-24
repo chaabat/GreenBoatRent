@@ -1,1 +1,72 @@
-<p>destinations works!</p>
+<app-ocean [greet]="true">
+  <!-- HERO -->
+  <section class="relative">
+    <div class="fade-bottom absolute inset-0">
+      <img src="images/destinations/la-maddalena.jpg" alt="" class="h-full w-full object-cover opacity-70">
+      <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/60 to-navy/10"></div>
+    </div>
+    <div class="relative mx-auto max-w-7xl px-5 pt-36 pb-28 lg:px-8">
+      <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+        <span class="h-px w-8 bg-gold"></span> Arcipelago della Maddalena
+      </p>
+      <h1 class="mt-4 font-serif text-5xl text-white sm:text-6xl">Destinazioni</h1>
+      <p class="mt-4 max-w-lg text-lg text-white/80">
+        Isole, lagune turchesi e calette di granito, tutte a portata di barca da Cannigione.
+      </p>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS (alternating) -->
+  <section class="mx-auto max-w-7xl space-y-20 px-5 pb-24 lg:space-y-28 lg:px-8">
+    @for (d of destinations; track d.id; let i = $index; let odd = $odd) {
+      <article class="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
+        <div class="group relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl shadow-black/40 ring-1 ring-white/10"
+             [class.lg:order-2]="odd">
+          <img [src]="d.image" [alt]="d.name" loading="lazy"
+               class="h-full w-full object-cover transition duration-1000 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent"></div>
+          <span class="absolute left-5 top-5 rounded-full bg-white/15 px-3 py-1 font-serif text-lg text-white backdrop-blur">
+            {{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}
+          </span>
+        </div>
+
+        <div>
+          <p class="flex items-center gap-2 text-sm font-semibold text-gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Arcipelago della Maddalena
+          </p>
+          <h2 class="mt-3 font-serif text-4xl text-white sm:text-5xl">{{ d.name }}</h2>
+          <p class="mt-4 max-w-md text-lg text-white/75">{{ d.description }}.</p>
+          <a routerLink="/flotta"
+             class="mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:border-gold hover:bg-gold hover:text-navy">
+            Scegli la barca per {{ d.name }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+    }
+  </section>
+
+  <!-- TIPS -->
+  <section class="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
+    <h2 class="text-center font-serif text-4xl text-white">Prima di partire</h2>
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      @for (t of tips; track t.title) {
+        <div class="glass p-6">
+          <h3 class="font-serif text-2xl text-gold">{{ t.title }}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-white/75">{{ t.text }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mx-auto max-w-3xl px-5 pb-32 text-center">
+    <h2 class="font-serif text-4xl text-white sm:text-5xl">Quale isola scegli <span class="italic text-gold">per prima?</span></h2>
+    <a routerLink="/flotta"
+       class="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-navy transition hover:bg-gold-dark">
+      Prenota la tua barca
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </section>
+</app-ocean>

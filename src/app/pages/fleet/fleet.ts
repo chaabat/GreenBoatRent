@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BoatCard } from '../../shared/boat-card/boat-card';
+import { Ocean } from '../../shared/ocean/ocean';
 import { BoatService } from '../../core/services/boat';
 import { Boat } from '../../core/models/boat';
 
@@ -9,7 +10,7 @@ type Filter = 'all' | 'gommone' | 'yacht' | 'none';
 
 @Component({
   selector: 'app-fleet',
-  imports: [BoatCard],
+  imports: [BoatCard, Ocean],
   templateUrl: './fleet.html'
 })
 export class Fleet {
@@ -26,7 +27,11 @@ export class Fleet {
     { id: 'none', label: 'Senza patente' }
   ];
 
-  filter = signal<Filter>('all');
+  /** Starts from ?tipo= (Home category shortcuts), then changed by the tabs */
+  filter = linkedSignal<Filter>(() => {
+    const t = this.query()?.get('tipo') as Filter | null;
+    return t && this.filters.some(f => f.id === t) ? t : 'all';
+  });
 
   /** Only show filters that have boats */
   visibleFilters = computed(() => {

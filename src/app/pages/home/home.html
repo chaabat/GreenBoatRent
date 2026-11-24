@@ -1,8 +1,11 @@
+<app-ocean [greet]="true">
 <!-- HERO -->
-<section class="relative flex min-h-[92vh] items-center overflow-hidden bg-navy">
-  <img src="images/hero.jpg" alt="Barca nell'Arcipelago della Maddalena"
-       class="absolute inset-0 h-full w-full object-cover">
-  <div class="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/45 to-transparent"></div>
+<section class="relative flex min-h-[92vh] items-center">
+  <div class="fade-bottom absolute inset-0">
+    <img src="images/hero.jpg" alt="Barca nell'Arcipelago della Maddalena"
+         class="h-full w-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/45 to-transparent"></div>
+  </div>
 
   <div class="relative mx-auto flex w-full max-w-7xl flex-col gap-10 px-5 pt-28 pb-40 lg:flex-row lg:items-end lg:justify-between lg:px-8">
     <!-- Text -->
@@ -47,30 +50,50 @@
   <app-search-bar />
 </div>
 
-<!-- FLEET -->
-<section class="mx-auto max-w-7xl px-5 pt-24 pb-28 lg:px-8">
+<!-- FLEET SHOWCASE (leads to /flotta) -->
+<div class="relative">
+  <app-fleet-showcase [boats]="boats()" />
+</div>
+
+<!-- DESTINATIONS -->
+<section class="relative mx-auto max-w-7xl px-5 pt-20 pb-24 lg:px-8">
   <div class="text-center">
-    <p class="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold-dark">
-      <span class="h-px w-8 bg-gold"></span> La nostra flotta <span class="h-px w-8 bg-gold"></span>
+    <p class="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+      <span class="h-px w-8 bg-gold"></span> Le nostre destinazioni <span class="h-px w-8 bg-gold"></span>
     </p>
-    <h2 class="mt-4 font-serif text-4xl text-navy sm:text-5xl">Barche per ogni esigenza</h2>
+    <h2 class="mt-4 font-serif text-4xl text-white sm:text-5xl">Paradisi da esplorare</h2>
   </div>
 
-  <!-- big vertical gap so the boats have room to pop out -->
-  <div class="mt-16 grid gap-x-8 gap-y-20 sm:mt-24 sm:grid-cols-2 sm:gap-y-28 lg:grid-cols-3">
-    @for (b of boats(); track b.id) {
-      <app-boat-card [boat]="b" />
+  <div class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+    @for (d of destinations; track d.id; let first = $first) {
+      <a routerLink="/destinazioni"
+         class="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-ocean shadow-2xl shadow-black/30 ring-1 ring-white/10 transition duration-500 hover:-translate-y-2"
+         [class.col-span-2]="first" [class.md:col-span-1]="first">
+        <img [src]="d.image" [alt]="d.name" loading="lazy"
+             class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+        <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-4">
+          <h3 class="flex items-center gap-1.5 font-serif text-xl text-white">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            {{ d.name }}
+          </h3>
+          <p class="mt-1 max-h-0 overflow-hidden text-xs text-white/80 opacity-0 transition-all duration-500 group-hover:max-h-10 group-hover:opacity-100">
+            {{ d.description }}
+          </p>
+        </div>
+      </a>
     }
   </div>
 </section>
 
-
 <!-- EXPERIENCES BANNER -->
-<section class="relative overflow-hidden bg-navy">
-  <img src="images/destinations/mortorio.jpg" alt="" class="absolute inset-0 h-full w-full object-cover">
-  <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-navy/10"></div>
+<section class="relative">
+  <div class="fade-y absolute inset-0">
+    <img src="images/destinations/mortorio.jpg" alt="" class="h-full w-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-navy/10"></div>
+  </div>
 
-  <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-28">
+  <div class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-28 lg:grid-cols-2 lg:px-8 lg:py-36">
     <div>
       <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
         <span class="h-px w-8 bg-gold"></span> Le nostre esperienze
@@ -102,48 +125,17 @@
   </div>
 </section>
 
-<!-- DESTINATIONS -->
-<section class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
-  <div class="text-center">
-    <p class="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold-dark">
-      <span class="h-px w-8 bg-gold"></span> Le nostre destinazioni <span class="h-px w-8 bg-gold"></span>
-    </p>
-    <h2 class="mt-4 font-serif text-4xl text-navy sm:text-5xl">Paradisi da esplorare</h2>
-  </div>
-
-  <div class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-    @for (d of destinations; track d.id; let first = $first) {
-      <a routerLink="/destinazioni"
-         class="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-ocean"
-         [class.col-span-2]="first" [class.md:col-span-1]="first">
-        <img [src]="d.image" [alt]="d.name" loading="lazy"
-             class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4">
-          <h3 class="flex items-center gap-1.5 font-serif text-xl text-white">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E3B062" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            {{ d.name }}
-          </h3>
-          <p class="mt-1 max-h-0 overflow-hidden text-xs text-white/80 opacity-0 transition-all duration-500 group-hover:max-h-10 group-hover:opacity-100">
-            {{ d.description }}
-          </p>
-        </div>
-      </a>
-    }
-  </div>
-</section>
-
 <!-- TRUST STRIP -->
-<section class="mx-auto max-w-7xl px-5 pb-24 lg:px-8">
-  <div class="grid grid-cols-2 gap-6 rounded-3xl bg-white p-6 shadow-sm md:grid-cols-4 md:p-8">
+<section class="relative mx-auto max-w-7xl px-5 py-16 lg:px-8">
+  <div class="grid grid-cols-2 gap-6 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-md md:grid-cols-4 md:p-8">
     @for (p of perks; track p.title) {
       <div class="flex items-center gap-3">
-        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sand text-navy">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/15 text-gold ring-1 ring-gold/30">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path [attr.d]="p.icon"/>
           </svg>
         </span>
-        <span class="text-sm font-semibold text-navy">{{ p.title }}</span>
+        <span class="text-sm font-semibold text-white">{{ p.title }}</span>
       </div>
     }
   </div>
@@ -152,11 +144,13 @@
 
 
 <!-- CONTACT CTA -->
-<section class="relative overflow-hidden bg-navy">
-  <img src="images/spots/arcipelago.jpg" alt="" class="absolute inset-0 h-full w-full object-cover opacity-40">
-  <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/40"></div>
+<section class="relative">
+  <div class="fade-y absolute inset-0">
+    <img src="images/spots/arcipelago.jpg" alt="" class="h-full w-full object-cover opacity-40">
+    <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/40"></div>
+  </div>
 
-  <div class="relative mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
+  <div class="relative mx-auto grid max-w-7xl gap-12 px-5 py-28 lg:grid-cols-2 lg:px-8 lg:py-32">
     <!-- Left -->
     <div class="text-white">
       <h2 class="font-serif text-4xl sm:text-5xl">Pronto a salpare?</h2>
@@ -240,3 +234,4 @@
     </div>
   </div>
 </section>
+</app-ocean>

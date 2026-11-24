@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BoatService } from '../../core/services/boat';
 
+/** Quick booking: choose a boat + date → straight to that boat's booking form */
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.html'
@@ -10,22 +11,29 @@ export class SearchBar {
   private router = inject(Router);
 
   boats = inject(BoatService).boats;
-  paxOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   today = new Date().toISOString().split('T')[0];
 
+  boatId = signal('');
   date = signal('');
-  boat = signal('');
-  pax = signal('');
+  /** shake + red border when "Prenota" is clicked without a boat */
+  missingBoat = signal(false);
 
-  search() {
-    const queryParams: Record<string, string> = {};
-    if (this.date()) queryParams['date'] = this.date();
-    if (this.pax()) queryParams['pax'] = this.pax();
+  selected = computed(() => this.boats().find(b => b.id === this.boatId()));
 
-    if (this.boat()) {
-      this.router.navigate(['/flotta', this.boat()], { queryParams });
-    } else {
-      this.router.navigate(['/flotta'], { queryParams });
+  pickBoat(id: string) {
+    this.boatId.set(id);
+    this.missingBoat.set(false);
+  }
+
+  book() {
+    const boat = this.selected();
+    if (!boat) {
+      this.missingBoat.set(true);
+      return;
     }
+    this.router.navigate(['/flotta', boat.id], {
+      queryParams: this.date() ? { date: this.date() } : {},
+      fragment: 'prenota'
+    });
   }
 }

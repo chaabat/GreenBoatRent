@@ -1,0 +1,110 @@
+<section class="showcase">
+  <!-- sky: sun, seagulls, nautical decorations -->
+  <span class="sun" aria-hidden="true"></span>
+
+  <svg class="deco-wheel" viewBox="0 0 100 100" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+      <circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="8"/>
+      @for (a of [0, 45, 90, 135, 180, 225, 270, 315]; track a) {
+        <line x1="50" y1="42" x2="50" y2="6" [attr.transform]="'rotate(' + a + ' 50 50)'"/>
+        <circle cx="50" cy="4" r="3.5" [attr.transform]="'rotate(' + a + ' 50 50)'"/>
+      }
+    </g>
+  </svg>
+
+  <svg class="deco-anchor" viewBox="0 0 64 80" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="10" r="6"/><path d="M32 16v56M20 28h24"/>
+      <path d="M8 50c0 14 11 22 24 22s24-8 24-22"/><path d="M4 54l4-6 6 4M60 54l-4-6-6 4"/>
+    </g>
+  </svg>
+
+  <svg class="gulls" viewBox="0 0 120 40" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path class="gull" d="M10 20q6-8 12 0q6-8 12 0"/>
+      <path class="gull g2" d="M60 10q5-6 10 0q5-6 10 0"/>
+      <path class="gull g3" d="M88 28q4-5 8 0q4-5 8 0"/>
+    </g>
+  </svg>
+
+  <div class="relative z-10 mx-auto grid max-w-7xl gap-10 px-5 pt-24 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:px-8">
+    <!-- Text -->
+    <div>
+      <p class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+        <span class="h-px w-8 bg-gold"></span> La nostra flotta
+      </p>
+      <h2 class="mt-4 font-serif text-4xl leading-tight text-white sm:text-5xl">
+        Barche per ogni esigenza,<br><span class="italic text-gold">pronte a salpare.</span>
+      </h2>
+      <p class="mt-5 max-w-md text-white/75">
+        Gommoni e yacht, con o senza patente. Scegli la tua barca e parti alla scoperta
+        dell'Arcipelago della Maddalena.
+      </p>
+
+      <a routerLink="/flotta" class="cta mt-8">
+        Scopri la flotta
+        <span class="cta-arrow" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <!-- Category shortcuts -->
+    <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+      @for (c of categories(); track c.id; let i = $index) {
+        <a routerLink="/flotta" [queryParams]="{ tipo: c.id }" class="chip" [style.animation-delay]="i * 120 + 'ms'">
+          <span class="font-serif text-3xl text-gold">{{ c.count }}</span>
+          <span class="flex-1 font-semibold text-white">{{ c.label }}</span>
+          <svg class="chip-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      }
+      @if (maxPax()) {
+        <p class="text-sm text-white/60 sm:col-span-3 lg:col-span-1">
+          {{ boats().length }} imbarcazioni · fino a {{ maxPax() }} persone a bordo
+        </p>
+      }
+    </div>
+  </div>
+
+  <!-- The sea: boats sailing by, click to open the fleet -->
+  <a routerLink="/flotta" class="sea" aria-label="Scopri la flotta e scegli la tua barca">
+    <!-- far islands (slow, behind) -->
+    <svg class="far-islands" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 120V96c60-10 110-40 170-44s90 30 150 34 80-20 130-18 60 18 120 22h40c60-30 120-62 190-60s100 40 160 46 90-14 140-10 70 22 130 22 70-26 110-30v62z"/>
+    </svg>
+
+    <svg class="wave w-back" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 60c120-30 240-30 360 0s240 30 360 0 240-30 360 0 240 30 360 0v60H0z"/>
+    </svg>
+
+    @if (fleetLoop().length) {
+      <div class="track" [style.--dur]="duration()">
+        @for (item of fleetLoop(); track $index; let i = $index) {
+          @if (item.kind === 'boat') {
+            <figure class="ship" [style.--d]="(i % 4) * -0.8 + 's'" aria-hidden="true">
+              <img [src]="item.boat.cutout" alt="" loading="lazy" (error)="hide($event)">
+              <figcaption>{{ item.boat.name }} <span>· {{ item.boat.pax }} pax</span></figcaption>
+            </figure>
+          } @else {
+            
+             
+              
+            
+          }
+        }
+      </div>
+    }
+
+    <svg class="wave w-mid" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 70c120 25 240 25 360 0s240-25 360 0 240 25 360 0 240-25 360 0v50H0z"/>
+    </svg>
+    <svg class="wave w-front" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 80c120-20 240-20 360 0s240 20 360 0 240-20 360 0 240 20 360 0v40H0z"/>
+    </svg>
+
+    <span class="hint" aria-hidden="true">
+      Scegli la tua barca
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </a>
+</section>

@@ -1,0 +1,206 @@
+<div class="ocean">
+  <!-- One continuous sea behind the whole page -->
+  <div class="ocean-decor" aria-hidden="true">
+    <span class="glow g1"></span><span class="glow g2"></span><span class="glow g3"></span>
+
+    <!-- compass rose -->
+    <svg class="d-compass" viewBox="0 0 200 200"><g fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70" stroke-dasharray="2 6"/>
+      <path d="M100 6l14 80-14 14-14-14zM100 194l14-80-14-14-14 14zM6 100l80-14 14 14-14 14zM194 100l-80-14-14 14 14 14z"/>
+      <path d="M100 40l8 52-8 8-8-8zM100 160l8-52-8-8-8 8z" transform="rotate(45 100 100)"/></g>
+      <text x="100" y="24" text-anchor="middle" fill="currentColor" font-size="14" font-family="Playfair Display, serif">N</text>
+    </svg>
+
+    <!-- steering wheel -->
+    <svg class="d-wheel" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="8"/>
+      <path d="M50 42V6M50 58v36M42 50H6M58 50h36M44 44 19 19M56 56l25 25M56 44l25-25M44 56 19 81"/></g>
+    </svg>
+
+    <!-- anchor -->
+    <svg class="d-anchor" viewBox="0 0 64 80"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="10" r="6"/><path d="M32 16v56M20 28h24M8 50c0 14 11 22 24 22s24-8 24-22M4 54l4-6 6 4M60 54l-4-6-6 4"/></g>
+    </svg>
+
+    <!-- rope -->
+    <svg class="d-rope" viewBox="0 0 400 60"><path d="M0 30c50-30 100 30 150 0s100-30 150 0 75 20 100 10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="10 6"/></svg>
+
+    <!-- Sardinian fish: one shape per species (all face right, 64x40) -->
+    <svg width="0" height="0" class="absolute">
+      <defs>
+        <!-- Orata: silver, gold bar between the eyes -->
+        <g id="f-orata">
+          <path class="tail" d="M14 20 1 7l4 13-4 13z" fill="#9FB0BC"/>
+          <path d="M12 20c7-13 22-17 34-15 9 2 14 8 16 15-2 6-7 12-16 13-12 2-27-1-34-13z" fill="#C9D4DC"/>
+          <path d="M14 22c10 8 24 11 34 9 6-1 10-4 13-8-4 6-10 10-17 10-12 1-23-3-30-11z" fill="#EEF2F5"/>
+          <path d="M18 18c10-4 22-6 34-4" fill="none" stroke="#8E9EAA" stroke-width="1"/>
+          <circle cx="45" cy="16" r="2.4" fill="#5A6670" opacity=".6"/>
+          <path d="M49 9c3 3 3 6 2 9" fill="none" stroke="#E3B062" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="54" cy="17" r="2.6" fill="#0B2A3C"/><circle cx="54.8" cy="16.2" r=".9" fill="#fff"/>
+        </g>
+
+        <!-- Sarago: silver with dark vertical bands + black spot near the tail -->
+        <clipPath id="c-sarago"><path d="M12 20c7-13 22-17 34-15 9 2 14 8 16 15-2 6-7 12-16 13-12 2-27-1-34-13z"/></clipPath>
+        <g id="f-sarago">
+          <path class="tail" d="M14 20 1 7l4 13-4 13z" fill="#B7C3CC"/>
+          <path d="M12 20c7-13 22-17 34-15 9 2 14 8 16 15-2 6-7 12-16 13-12 2-27-1-34-13z" fill="#D9E1E7"/>
+          <g clip-path="url(#c-sarago)" fill="#3C4952" opacity=".55">
+            <rect x="22" y="0" width="3" height="40"/><rect x="30" y="0" width="3" height="40"/>
+            <rect x="38" y="0" width="3" height="40"/><rect x="46" y="0" width="2.5" height="40"/>
+          </g>
+          <circle cx="15" cy="20" r="3.2" fill="#1C252B"/>
+          <circle cx="54" cy="17" r="2.6" fill="#0B2A3C"/><circle cx="54.8" cy="16.2" r=".9" fill="#fff"/>
+        </g>
+
+        <!-- Salpa: long silver-olive body with golden stripes -->
+        <clipPath id="c-salpa"><path d="M10 20c10-9 26-12 38-11 8 1 13 5 15 11-2 6-7 10-15 11-12 1-28-2-38-11z"/></clipPath>
+        <g id="f-salpa">
+          <path class="tail" d="M12 20 0 9l3 11-3 11z" fill="#A9B39A"/>
+          <path d="M10 20c10-9 26-12 38-11 8 1 13 5 15 11-2 6-7 10-15 11-12 1-28-2-38-11z" fill="#BCC6AE"/>
+          <g clip-path="url(#c-salpa)" fill="none" stroke="#E8C25A" stroke-width="1.3">
+            <path d="M8 13h56M8 17h56M8 21h56M8 25h56M8 29h56"/>
+          </g>
+          <circle cx="55" cy="18" r="2.4" fill="#0B2A3C"/><circle cx="55.7" cy="17.3" r=".8" fill="#fff"/>
+        </g>
+
+        <!-- Donzella pavonina: green-turquoise, blue band, red-orange head lines -->
+        <g id="f-donzella">
+          <path class="tail" d="M12 20 0 8c4 4 4 20 0 24z" fill="#2B8FB3"/>
+          <path d="M10 20c10-10 26-13 38-12 8 1 13 5 15 12-2 6-7 10-15 11-12 1-28-2-38-11z" fill="#2FA98A"/>
+          <path d="M36 9c-2 7-2 15 0 22" fill="none" stroke="#3A6FD8" stroke-width="4"/>
+          <path d="M44 11c3 2 6 3 10 3M45 24c3-1 6-1 10 0M43 18c4 0 8 1 12 2" fill="none" stroke="#E8663C" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="55" cy="17" r="2.4" fill="#0B2A3C"/><circle cx="55.7" cy="16.3" r=".8" fill="#fff"/>
+        </g>
+
+        <!-- Cernia: big brown grouper with pale blotches -->
+        <g id="f-cernia">
+          <path class="tail" d="M12 20C6 12 2 10 0 10c2 6 2 14 0 20 2 0 6-2 12-10z" fill="#5C4230"/>
+          <path d="M10 20c6-14 22-18 36-16 10 2 16 9 17 16-1 7-7 13-17 15-14 2-30-2-36-15z" fill="#6E5038"/>
+          <g fill="#C9A87C" opacity=".55">
+            <ellipse cx="24" cy="14" rx="3" ry="2"/><ellipse cx="32" cy="22" rx="3.5" ry="2.2"/>
+            <ellipse cx="40" cy="12" rx="2.6" ry="1.8"/><ellipse cx="22" cy="25" rx="2.6" ry="1.8"/>
+            <ellipse cx="44" cy="26" rx="2.4" ry="1.6"/>
+          </g>
+          <path d="M55 26c3 1 6 0 8-2" fill="none" stroke="#3A2A1E" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="53" cy="15" r="3" fill="#1C140E"/><circle cx="54" cy="14" r="1" fill="#fff"/>
+        </g>
+
+        <!-- Pesce pappagallo (Sparisoma cretense): red body, dark head, yellow patch -->
+        <g id="f-pappagallo">
+          <path class="tail" d="M13 20 1 8l3 12-3 12z" fill="#B8423F"/>
+          <path d="M11 20c8-12 22-15 34-14 9 1 15 7 17 14-2 7-8 12-17 13-12 1-26-1-34-13z" fill="#D9534F"/>
+          <path d="M44 6c9 1 15 7 18 14-3 7-9 12-18 13 3-8 3-19 0-27z" fill="#5A5F66"/>
+          <ellipse cx="32" cy="11" rx="6" ry="3" fill="#F2C94C"/>
+          <circle cx="53" cy="17" r="2.5" fill="#0B0F12"/><circle cx="53.8" cy="16.2" r=".8" fill="#fff"/>
+        </g>
+
+        <!-- Castagnola (young): small electric blue -->
+        <g id="f-castagnola">
+          <path class="tail" d="M14 20 2 8l5 12-5 12z" fill="#2D6FE0"/>
+          <path d="M12 20c8-12 22-16 34-14 9 2 14 8 16 14-2 6-7 12-16 14-12 2-26-2-34-14z" fill="#3A8DFF"/>
+          <path d="M20 18c10-3 22-4 32-1" fill="none" stroke="#9FD0FF" stroke-width="1.5"/>
+          <circle cx="53" cy="17" r="2.8" fill="#0B2A3C"/><circle cx="53.8" cy="16.2" r=".9" fill="#fff"/>
+        </g>
+      </defs>
+    </svg>
+
+    @for (f of fish; track $index) {
+      <div class="swim" [class.to-left]="f.dir === 'l'"
+           [style.top.%]="f.top"
+           [style.--dur]="f.dur + 's'" [style.--delay]="f.delay + 's'">
+        @if (hasPhoto(f.species)) {
+          <img class="fish photo" [src]="photo(f.species)" alt="" [style.width.px]="f.size * 1.3" (error)="noPhoto(f.species)">
+        } @else {
+          <svg class="fish" viewBox="0 0 64 40" [style.width.px]="f.size">
+            <use [attr.href]="'#f-' + f.species"/>
+          </svg>
+        }
+      </div>
+    }
+
+    @for (sc of schools; track $index) {
+      <div class="swim school" [class.to-left]="sc.dir === 'l'"
+           [style.top.%]="sc.top" [style.--dur]="sc.dur + 's'" [style.--delay]="sc.delay + 's'">
+        @for (n of schoolFish; track n) {
+          @if (hasPhoto('castagnola')) {
+            <img class="fish mini photo" [src]="photo('castagnola')" alt="" [style.--i]="n" (error)="noPhoto('castagnola')">
+          } @else {
+            <svg class="fish mini" viewBox="0 0 64 40" [style.--i]="n">
+              <use href="#f-castagnola"/>
+            </svg>
+          }
+        }
+      </div>
+    }
+
+    <!-- Polpi: rest, then sometimes jet away and drift back -->
+    @for (o of octopuses; track $index) {
+      <div class="octo" [style.top.%]="o.top" [style.left.%]="o.left" [style.width.px]="o.size"
+           [style.--delay]="o.delay + 's'" [class.flip]="o.flip">
+        @if (hasPhoto('polpo')) {
+          <img class="octo-body photo" [src]="photo('polpo')" alt="" (error)="noPhoto('polpo')">
+        } @else {
+        <svg class="octo-body" viewBox="0 0 80 110">
+          @for (t of tentacles; track t.i) {
+            <path class="tentacle" [attr.d]="t.d" [style.animation-delay]="t.i * -0.35 + 's'"
+                  fill="none" stroke="#B8472F" stroke-width="5" stroke-linecap="round"/>
+          }
+          <ellipse cx="40" cy="30" rx="22" ry="27" fill="#C8553D"/>
+          <ellipse cx="34" cy="20" rx="6" ry="9" fill="#E07A5F" opacity=".6"/>
+          <g fill="#F2B8A0" opacity=".7"><circle cx="48" cy="18" r="2"/><circle cx="30" cy="36" r="1.6"/><circle cx="50" cy="34" r="1.8"/></g>
+          <ellipse cx="32" cy="46" rx="5" ry="4.5" fill="#fff"/><ellipse cx="48" cy="46" rx="5" ry="4.5" fill="#fff"/>
+          <ellipse cx="32" cy="47" rx="2.6" ry="3" fill="#0B2A3C"/><ellipse cx="48" cy="47" rx="2.6" ry="3" fill="#0B2A3C"/>
+        </svg>
+        }
+      </div>
+    }
+
+    <!-- Gamberi: walk slowly, then flick backwards fast -->
+    @for (g of shrimps; track $index) {
+      <div class="shrimp" [style.top.%]="g.top" [style.left.%]="g.left" [style.--delay]="g.delay + 's'" [class.flip]="g.flip">
+        @if (hasPhoto('gambero')) {
+          <img class="shrimp-body photo" [src]="photo('gambero')" alt="" (error)="noPhoto('gambero')">
+        } @else {
+        <svg viewBox="0 0 70 36" class="shrimp-body">
+          <path d="M60 14c8-6 10-12 8-14M60 14c10-2 14-8 14-10" fill="none" stroke="#F2A07B" stroke-width="1"/>
+          <g class="legs" stroke="#D9623B" stroke-width="1.4" stroke-linecap="round">
+            <path d="M44 22l-2 8M38 23l-2 8M32 23l-1 8M26 22l-1 7"/>
+          </g>
+          <path d="M8 14c4 8 14 12 26 11 12-1 22-4 26-11-4-6-14-9-26-8C22 7 12 8 8 14z" fill="#F08A5D"/>
+          <path d="M20 9c0 6 0 11 1 15M30 7c0 7 0 12 1 17M40 8c0 6 0 11-1 16" fill="none" stroke="#D9623B" stroke-width="1"/>
+          <path d="M8 14 0 6l3 8-3 8z" fill="#E8774A"/>
+          <circle cx="57" cy="12" r="1.8" fill="#0B2A3C"/>
+        </svg>
+        }
+      </div>
+    }
+
+    @for (b of bubbles; track $index) {
+      <span class="bubble" [style.left.%]="b.x" [style.top.%]="b.y" [style.width.px]="b.s" [style.height.px]="b.s" [style.animation-delay.s]="b.d"></span>
+    }
+  </div>
+
+  <!-- Greeting fish (above the content) -->
+  @if (greet()) {
+  <div class="ocean-front" aria-hidden="true">
+    @for (g of greeters; track $index) {
+      <div class="swim greeter" [class.to-left]="g.dir === 'l'"
+           [style.top.%]="g.top" [style.--delay]="g.delay + 's'" [style.--stop]="g.stop + 'vw'">
+        @if (hasPhoto(g.species)) {
+          <img class="fish photo" [src]="photo(g.species)" alt="" [style.width.px]="g.size * 1.3" (error)="noPhoto(g.species)">
+        } @else {
+          <svg class="fish" viewBox="0 0 64 40" [style.width.px]="g.size">
+            <use [attr.href]="'#f-' + g.species"/>
+          </svg>
+        }
+        <a routerLink="/flotta" class="hello" tabindex="-1">
+          {{ message() }}
+          <span class="hello-cta">Prenota →</span>
+        </a>
+      </div>
+    }
+  </div>
+  }
+
+  <ng-content />
+</div>

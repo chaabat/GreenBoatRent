@@ -1,0 +1,211 @@
+:host { display: block; }
+
+.showcase {
+  position: relative;
+  overflow: hidden;
+}
+.sun {
+  position: absolute;
+  top: -120px;
+  right: 8%;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(227,176,98,.45), rgba(227,176,98,0) 65%);
+  animation: glow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glow { 50% { transform: scale(1.12); opacity: .8; } }
+
+/* ---------- CTA ---------- */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 28px;
+  border-radius: 999px;
+  background: #E3B062;
+  color: #0B2A3C;
+  font-weight: 600;
+  transition: background .3s, transform .3s;
+}
+.cta-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0B2A3C;
+  color: #E3B062;
+  transition: transform .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.cta:hover { background: #C99540; transform: translateY(-2px); }
+.cta:hover .cta-arrow { transform: translateX(6px) rotate(-8deg); }
+
+/* ---------- Category chips ---------- */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 20px;
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  animation: rise .7s cubic-bezier(.2,.8,.2,1) forwards;
+  transition: background .3s, border-color .3s, transform .3s;
+}
+.chip-arrow { color: #E3B062; transition: transform .3s; }
+.chip:hover { background: rgba(255,255,255,.14); border-color: #E3B062; transform: translateX(6px); }
+.chip:hover .chip-arrow { transform: translateX(4px); }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Sea ---------- */
+.sea {
+  position: relative;
+  display: block;
+  height: 300px;
+  margin-top: 24px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.track {
+  position: absolute;
+  left: 0;
+  bottom: 52px;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+  width: max-content;
+  animation: sail var(--dur, 50s) linear infinite;
+}
+@keyframes sail { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.ship {
+  margin: 0;
+  width: 280px;
+  text-align: center;
+  animation: bob 3.4s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+  transition: transform .4s;
+}
+.ship img {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 18px 14px rgba(0,0,0,.45));
+  transition: transform .5s cubic-bezier(.2,.9,.3,1.2);
+}
+.ship figcaption {
+  margin-top: -6px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 18px;
+  color: #fff;
+  opacity: .9;
+  text-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+.ship figcaption span { font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #E3B062; }
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+.wave {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 200%;
+  height: 90px;
+  pointer-events: none;
+}
+.w-back  { z-index: 0; fill: rgba(63,184,201,.35); animation: drift 16s linear infinite; }
+.w-mid   { z-index: 2; fill: rgba(31,110,140,.55); height: 70px; animation: drift 11s linear infinite; }
+.w-front { z-index: 2; fill: rgba(14,53,80,.7); height: 46px; animation: drift 8s linear infinite; }
+@keyframes drift { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.hint {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0B2A3C;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  opacity: 0;
+  transform: translate(-50%, -10px);
+  transition: opacity .3s, transform .3s;
+}
+
+/* Hover the sea: boats slow down, grow, hint appears */
+.sea:hover .track,
+.sea:focus-visible .track { animation-play-state: paused; }
+.sea:hover .ship img { transform: scale(1.08) translateY(-6px); }
+.sea:hover .hint,
+.sea:focus-visible .hint { opacity: 1; transform: translate(-50%, 0); }
+.sea:focus-visible { outline: 3px solid #E3B062; outline-offset: -3px; }
+
+/* Touch screens: no hover, hint always visible */
+@media (hover: none) {
+  .hint { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ---------- Nautical decorations ---------- */
+.deco-wheel,
+.deco-anchor,
+.gulls { position: absolute; pointer-events: none; color: #E3B062; }
+.deco-wheel {
+  top: 70px; right: -60px; width: 260px; opacity: .1;
+  animation: spin 40s linear infinite;
+}
+.deco-anchor {
+  top: 40%; left: -14px; width: 90px; opacity: .1;
+  animation: sway 6s ease-in-out infinite; transform-origin: 50% 0;
+}
+.gulls { top: 50px; left: 38%; width: 120px; color: rgba(255,255,255,.6); animation: fly 18s ease-in-out infinite; }
+.gull { animation: flap 1.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.g2 { animation-delay: .3s; }
+.g3 { animation-delay: .6s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes sway { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+@keyframes fly  { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(120px, -14px); } }
+@keyframes flap { 50% { transform: scaleY(.5); } }
+
+.far-islands {
+  position: absolute; left: 0; bottom: 70px; z-index: 0;
+  width: 200%; height: 70px;
+  fill: rgba(11,42,60,.45);
+  animation: drift 90s linear infinite;
+}
+
+/* sea items between the boats */
+.deco { flex: none; margin-bottom: 18px; animation: bob 4s ease-in-out infinite; }
+.island     { width: 180px; margin-bottom: 4px; animation: none; }
+.lighthouse { width: 70px; margin-bottom: 4px; animation: none; }
+.buoy       { width: 34px; animation-duration: 2.6s; }
+.lamp { animation: blink 2s ease-in-out infinite; }
+@keyframes blink { 50% { fill: #fff6d5; } }
+
+@media (max-width: 640px) {
+  .island { width: 130px; }
+  .lighthouse { width: 52px; }
+  .deco-wheel { width: 160px; right: -50px; }
+  .deco-anchor { display: none; }
+  .sea { height: 230px; }
+  .ship { width: 200px; }
+  .track { gap: 28px; bottom: 44px; }
+  .ship figcaption { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track, .ship, .wave, .sun, .chip, .deco, .far-islands, .deco-wheel, .deco-anchor, .gulls, .gull, .lamp { animation: none; opacity: 1; }
+  .deco-wheel, .deco-anchor { opacity: .1; }
+  .sea { overflow-x: auto; }
+}
